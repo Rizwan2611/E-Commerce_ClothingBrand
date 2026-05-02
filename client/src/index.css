@@ -1,0 +1,279 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&family=Rock+Salt&display=swap');
+
+@import "tailwindcss";
+
+@theme {
+  /* Base Text */
+  --color-white: #F5F5F0;
+  /* Soft off-white to complement brass */
+  --color-black: #111111;
+
+  /* Midnight Onyx Base (Imperial Byzantine Background) */
+  --color-zinc-950: #111111;
+  /* Deepest Onyx */
+  --color-zinc-900: #1A1A1A;
+  /* Midnight Onyx (Cards/Sections) */
+  --color-zinc-800: #262626;
+  /* Borders/Hover */
+  --color-zinc-700: #333333;
+  --color-zinc-600: #4D4D4D;
+  --color-zinc-500: #737373;
+  /* Muted texts */
+  --color-zinc-400: #A6A6A6;
+  --color-zinc-300: #D9D9D9;
+
+  /* Antique Brass (Primary Accent) */
+  --color-amber-500: #B0954B;
+  --color-amber-400: #C9AE5D;
+  /* Antique Brass */
+  --color-amber-300: #D4BF7D;
+
+  /* Tyrian Purple (Secondary / Deep Accent) */
+  --color-red-600: #66023C;
+  /* Tyrian Purple */
+  --color-red-500: #7D0249;
+  /* Tyrian Purple Light */
+  --color-red-400: #940356;
+
+  /* Emerald Jewel (Vivid Contrast) */
+  --color-green-500: #3EB465;
+  --color-green-400: #50C878;
+  /* Emerald Jewel */
+  --color-green-300: #7EDB9B;
+
+  --font-rock-salt: "Rock Salt", cursive;
+}
+
+@layer base {
+  :root {
+    --color-primary: 250 250 250;
+    /* Light gray / near white */
+    --color-text: 17 17 17;
+    /* Near black */
+  }
+
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: var(--font-rock-salt), cursive !important;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background-color: white;
+    color: black;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    line-height: 1.2;
+  }
+}
+
+@layer components {
+
+  /* Using Emerald Green as primary accent */
+  .btn-primary {
+    @apply bg-green-400 hover:bg-green-300 text-black font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-green-400/30 active:scale-95 cursor-pointer;
+  }
+
+  /* Using Tyrian Purple */
+  .btn-secondary {
+    @apply bg-[#66023C] hover:bg-[#7D0249] text-[#F5F5F0] font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-[#66023C]/30 cursor-pointer border border-[#7D0249];
+  }
+
+  .btn-danger {
+    @apply bg-[#66023C] hover:bg-[#7D0249] text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 cursor-pointer;
+  }
+
+  .card {
+    @apply bg-white border border-zinc-200 rounded-2xl p-6 transition-all duration-200 shadow-sm;
+  }
+
+  .card-hover {
+    @apply bg-white border border-zinc-200 rounded-2xl p-6 transition-all duration-200 hover:border-green-400 hover:shadow-xl hover:shadow-green-400/10 hover:-translate-y-1;
+  }
+
+  .input-field {
+    @apply w-full bg-zinc-50 border border-zinc-300 rounded-xl px-4 py-3 text-black placeholder-zinc-400 focus:outline-none focus:border-green-400 focus:ring-1 focus:ring-green-400 transition-all duration-200;
+  }
+
+  .badge {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold;
+  }
+
+  .badge-pending {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-400/15 text-amber-400;
+  }
+
+  .badge-confirmed {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-400/15 text-blue-400;
+  }
+
+  .badge-processing {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-400/15 text-purple-400;
+  }
+
+  .badge-shipped {
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-400/15 text-cyan-400;
+  }
+
+  .badge-delivered {
+    /* Utilizing Emerald Jewel */
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#50C878]/15 text-[#50C878];
+  }
+
+  .badge-cancelled {
+    /* Utilizing Tyrian Purple */
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#66023C]/20 text-[#D47BA4];
+  }
+
+  .glass {
+    @apply bg-white/5 backdrop-blur-md border border-white/10;
+  }
+
+  .glass-premium {
+    @apply bg-white/70 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.1)];
+  }
+
+  .depth-sm {
+    @apply shadow-[0_4px_12px_rgba(0,0,0,0.05)];
+  }
+
+  .depth-md {
+    @apply shadow-[0_12px_40px_rgba(0,0,0,0.1)];
+  }
+
+  .depth-lg {
+    @apply shadow-[0_30px_60px_rgba(0,0,0,0.15)];
+  }
+
+  .three-d-card {
+    @apply transition-all duration-500 ease-out;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+  }
+
+  .three-d-card:hover {
+    transform: perspective(1000px) rotateX(4deg) rotateY(4deg) translateZ(20px);
+    @apply shadow-[0_40px_80px_rgba(80,200,120,0.15)];
+  }
+
+  .section-title {
+    @apply text-3xl md:text-4xl font-bold text-white tracking-wide;
+    font-family: 'Playfair Display', Georgia, serif;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-transparent;
+  }
+
+  /* Admin sidebar */
+  .admin-sidebar {
+    @apply fixed left-0 top-0 h-full w-64 bg-zinc-950 border-r border-zinc-800 flex flex-col z-40 shadow-xl;
+  }
+
+  .admin-nav-item {
+    @apply flex items-center gap-3 px-4 py-3 rounded-xl text-zinc-400 hover:text-white hover:bg-zinc-800 transition-all duration-150 cursor-pointer mx-2;
+  }
+
+  .admin-nav-item.active {
+    @apply text-amber-400 bg-amber-400/10 border border-amber-400/20 shadow-md;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #F5F5F0;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #D9D9D9;
+    border-radius: 9999px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #A6A6A6;
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.4s ease-in-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes float {
+  0% {
+    transform: translateY(0px);
+  }
+
+  50% {
+    transform: translateY(-10px);
+  }
+
+  100% {
+    transform: translateY(0px);
+  }
+}
+
+@keyframes pulseGlow {
+
+  0%,
+  100% {
+    opacity: 1;
+  }
+
+  50% {
+    opacity: .7;
+  }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
