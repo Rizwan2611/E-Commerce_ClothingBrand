@@ -19,11 +19,19 @@ const AdminSettings = () => {
   const [isLocked, setIsLocked] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
   const searchTimeout = useRef(null);
+  // Stabilized Map URL state to prevent unnecessary iframe flickering
+  const [mapUrl, setMapUrl] = useState('');
 
   useEffect(() => {
     adminApi.get('/admin/settings')
       .then(res => {
         setForm(res.data.settings);
+        const { lat, lng, address } = res.data.settings;
+        if (lat && lng) {
+          setMapUrl(`https://www.google.com/maps?q=${lat},${lng}&z=16&output=embed`);
+        } else if (address) {
+          setMapUrl(`https://www.google.com/maps?q=${encodeURIComponent(address)}&z=16&output=embed`);
+        }
         setLoading(false);
       })
       .catch(err => {
@@ -32,30 +40,42 @@ const AdminSettings = () => {
       });
   }, []);
 
-  // Live geocoding with debounce
+  // Optimized geocoding with visual feedback
   useEffect(() => {
-    if (!isLocked && form.address && form.address.length > 5) {
+    if (!isLocked && form.address && form.address.trim().length > 8) {
       if (searchTimeout.current) clearTimeout(searchTimeout.current);
       
       setIsSearching(true);
       searchTimeout.current = setTimeout(async () => {
         try {
-          const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(form.address)}`);
+          // Attempt high-precision geocoding
+          const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(form.address)}&addressdetails=1&limit=1`);
           const data = await res.json();
           
           if (data && data.length > 0) {
+            const newLat = parseFloat(data[0].lat);
+            const newLng = parseFloat(data[0].lon);
+            
             setForm(prev => ({ 
               ...prev, 
-              lat: parseFloat(data[0].lat), 
-              lng: parseFloat(data[0].lon) 
+              lat: newLat, 
+              lng: newLng 
             }));
+            
+            setMapUrl(`https://www.google.com/maps?q=${newLat},${newLng}&z=17&output=embed`);
+          } else {
+            // If precision geocoding fails, fallback to raw address search directly in the map
+            // This is much more reliable as Google Maps can handle broader search terms
+            setMapUrl(`https://www.google.com/maps?q=${encodeURIComponent(form.address)}&z=17&output=embed`);
           }
         } catch (err) {
           console.error('Geocoding error:', err);
+          // On network error, still try to show the map using the address text
+          setMapUrl(`https://www.google.com/maps?q=${encodeURIComponent(form.address)}&z=17&output=embed`);
         } finally {
           setIsSearching(false);
         }
-      }, 800); // Faster 800ms debounce for "simultaneous" feel
+      }, 1500); // 1.5s debounce for maximum stability while typing
     }
 
     return () => {
@@ -66,30 +86,17 @@ const AdminSettings = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!isLocked) {
-      return toast.error('Please lock the location before saving');
+      return toast.error('Please lock the location to verify your shop address');
     }
     setSaving(true);
     try {
       await adminApi.put('/admin/settings', form);
-      toast.success('Settings saved successfully');
+      toast.success('Store settings updated');
     } catch (err) {
       toast.error('Failed to save settings');
     } finally {
       setSaving(false);
     }
-  };
-
-  // Build Google Maps embed URL
-  const getMapEmbedUrl = () => {
-    const lat = parseFloat(form.lat);
-    const lng = parseFloat(form.lng);
-    if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
-      return `https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
-    }
-    if (form.address) {
-      return `https://www.google.com/maps?q=${encodeURIComponent(form.address)}&z=15&output=embed`;
-    }
-    return `https://www.google.com/maps?q=0,0&z=2&output=embed`;
   };
 
   if (loading) return (
@@ -238,7 +245,7 @@ const AdminSettings = () => {
                     )}
                     <iframe
                       title="Store Location"
-                      src={getMapEmbedUrl()}
+                      src={mapUrl}
                       width="100%"
                       height="100%"
                       style={{ border: 0 }}

@@ -16,85 +16,102 @@ const LocationPage = () => {
     );
   }
 
-  const lat = shop?.lat || 19.0760;
-  const lng = shop?.lng || 72.8777;
+  const shopData = shop || {};
+  const lat = parseFloat(shopData.lat);
+  const lng = parseFloat(shopData.lng);
 
-  // Google Maps embed URL
+  // High-reliability Map URL generator (Matching Admin Side logic)
   const getMapEmbedUrl = () => {
-    if (lat && lng) {
-      return `https://www.google.com/maps?q=${lat},${lng}&z=15&output=embed`;
+    if (lat && lng && !isNaN(lat) && !isNaN(lng) && lat !== 0) {
+      return `https://www.google.com/maps?q=${lat},${lng}&z=17&output=embed`;
     }
-    if (shop?.address) {
-      return `https://www.google.com/maps?q=${encodeURIComponent(shop.address)}&z=15&output=embed`;
+    if (shopData.address) {
+      return `https://www.google.com/maps?q=${encodeURIComponent(shopData.address)}&z=17&output=embed`;
     }
-    return `https://www.google.com/maps?q=0,0&z=2&output=embed`;
+    return `https://www.google.com/maps?q=Karachi&z=12&output=embed`;
   };
 
-  // Google Maps directions link
   const getDirectionsUrl = () => {
-    return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    if (lat && lng && !isNaN(lat) && !isNaN(lng)) {
+      return `https://www.google.com/maps/dir/?api=1&destination=${lat},${lng}`;
+    }
+    return `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(shopData.address || '')}`;
   };
 
   return (
-    <div className="pt-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-20">
+    <div className="pt-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-32">
+      {/* signature soft grid background */}
+      <div 
+        className="fixed inset-0 z-0 opacity-[0.05] pointer-events-none" 
+        style={{ 
+          backgroundImage: 'linear-gradient(to right, #50C878 1px, transparent 1px), linear-gradient(to bottom, #50C878 1px, transparent 1px)', 
+          backgroundSize: '80px 80px' 
+        }} 
+      />
+
       {/* Header */}
-      <div className="mb-16 text-center">
-        <h1 className="font-playfair text-4xl font-bold text-white mb-3">Find Our Store</h1>
-        <p className="text-zinc-400 text-sm">Visit us in person or get in touch</p>
+      <div className="mb-20 text-center relative z-10">
+        <span className="text-xs font-[1000] text-green-500 uppercase tracking-[0.5em] mb-4 block">Visit the Studio</span>
+        <h1 className="font-rock-salt text-4xl md:text-5xl font-black text-black uppercase tracking-tighter drop-shadow-sm">
+          Find Our Culture
+        </h1>
+        <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-4">Experience the Void in Person</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 relative z-10">
         {/* Contact Info */}
         <div className="space-y-8">
-          <div className="bg-white border-2 border-black rounded-3xl p-8 shadow-sm">
-            <h3 className="text-xl font-bold text-black mb-8 border-b-2 border-black pb-4">
+          <div className="glass-premium rounded-[2.5rem] p-10 border-2 border-white/50 depth-lg">
+            <h3 className="text-xl font-[1000] text-black mb-10 uppercase tracking-widest border-b border-zinc-100 pb-6 flex items-center gap-3">
+              <Phone size={20} className="text-green-500" />
               Contact Info
             </h3>
-            <div className="space-y-8">
-              <div className="flex gap-6">
-                <div className="w-14 h-14 bg-zinc-100 border-2 border-black rounded-2xl flex items-center justify-center shrink-0">
-                  <MapPin className="text-black" size={24} />
+            <div className="space-y-10">
+              <div className="flex gap-6 group">
+                <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center shrink-0 shadow-xl group-hover:scale-110 transition-transform">
+                  <MapPin size={24} className="text-green-400" />
                 </div>
                 <div>
-                  <p className="text-black font-bold text-sm mb-1">Address</p>
-                  <p className="text-zinc-500 text-sm leading-relaxed">
-                    {shop?.address || 'Address not set'}
+                  <p className="text-black font-[1000] text-[10px] uppercase tracking-widest mb-2">Our Studio</p>
+                  <p className="text-zinc-500 text-xs font-bold leading-relaxed tracking-tight">
+                    {shopData.address || 'Void Sector, Karachi'}
                   </p>
                 </div>
               </div>
               
-              <div className="flex gap-6">
-                <div className="w-14 h-14 bg-zinc-100 border-2 border-black rounded-2xl flex items-center justify-center shrink-0">
-                  <Phone className="text-black" size={24} />
+              <div className="flex gap-6 group">
+                <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center shrink-0 shadow-xl group-hover:scale-110 transition-transform">
+                  <Phone size={24} className="text-green-400" />
                 </div>
                 <div>
-                  <p className="text-black font-bold text-sm mb-1">Phone</p>
-                  <a href={`tel:${shop?.phone}`} className="text-zinc-500 text-sm hover:text-green-500 transition-colors">
-                    {shop?.phone || 'Not available'}
+                  <p className="text-black font-[1000] text-[10px] uppercase tracking-widest mb-2">Call Us</p>
+                  <a href={`tel:${shopData.phone}`} className="text-zinc-500 text-xs font-bold hover:text-black transition-colors tracking-tight">
+                    {shopData.phone || '+92 300 0000000'}
                   </a>
                 </div>
               </div>
 
-              <div className="flex gap-6">
-                <div className="w-14 h-14 bg-zinc-100 border-2 border-black rounded-2xl flex items-center justify-center shrink-0">
-                  <Mail className="text-black" size={24} />
+              <div className="flex gap-6 group">
+                <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center shrink-0 shadow-xl group-hover:scale-110 transition-transform">
+                  <Mail size={24} className="text-green-400" />
                 </div>
                 <div>
-                  <p className="text-black font-bold text-sm mb-1">Email</p>
-                  <a href={`mailto:${shop?.email}`} className="text-zinc-500 text-sm hover:text-green-500 transition-colors">
-                    {shop?.email || 'Not available'}
+                  <p className="text-black font-[1000] text-[10px] uppercase tracking-widest mb-2">Email Inquiries</p>
+                  <a href={`mailto:${shopData.email}`} className="text-zinc-500 text-xs font-bold hover:text-black transition-colors tracking-tight">
+                    {shopData.email || 'hello@voidculture.pk'}
                   </a>
                 </div>
               </div>
             </div>
           </div>
 
-          <div className="bg-zinc-50 border-2 border-dashed border-black/20 rounded-3xl p-8">
-            <h3 className="text-lg font-bold text-black mb-6">Store Hours</h3>
-            <div className="space-y-4">
-              <div className="flex items-center gap-4 text-zinc-500">
-                <Clock className="text-black" size={20} />
-                <div className="flex-1 text-sm font-medium leading-relaxed">
+          <div className="bg-zinc-900 rounded-[2.5rem] p-10 depth-md text-white border-2 border-black relative overflow-hidden group">
+            <div className="absolute inset-0 bg-green-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+            <h3 className="text-sm font-[1000] text-green-400 mb-6 uppercase tracking-[0.4em] relative z-10">Store Hours</h3>
+            <div className="space-y-4 relative z-10">
+              <div className="flex items-start gap-4">
+                <Clock className="text-zinc-500" size={18} />
+                <div className="text-xs font-bold leading-relaxed tracking-widest uppercase text-zinc-300">
                   Mon — Sat: 10AM — 9PM<br />
                   Sun: 12PM — 7PM
                 </div>
@@ -107,17 +124,17 @@ const LocationPage = () => {
             href={getDirectionsUrl()}
             target="_blank"
             rel="noreferrer"
-            className="w-full bg-black text-white py-5 rounded-2xl flex items-center justify-center gap-3 text-sm font-bold hover:bg-green-400 hover:text-black transition-all shadow-lg active:scale-95"
+            className="group w-full bg-black text-white py-6 rounded-[2rem] flex items-center justify-center gap-4 text-xs font-[1000] uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-2xl shadow-black/20 active:scale-95 border-2 border-black"
           >
-            <Navigation size={18} />
-            Get Directions
+            <Navigation size={18} className="text-green-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
+            Navigate to Studio
           </a>
         </div>
 
         {/* Google Maps Embed */}
         <div className="lg:col-span-2">
-          <div className="bg-white border-2 border-black rounded-3xl p-3 h-full min-h-[500px] shadow-xl shadow-black/5">
-            <div className="w-full h-full rounded-2xl overflow-hidden" style={{ minHeight: '500px' }}>
+          <div className="bg-white border-2 border-black rounded-[3rem] p-4 h-full min-h-[500px] shadow-2xl shadow-black/5 relative overflow-hidden">
+            <div className="w-full h-full rounded-[2.5rem] overflow-hidden border-2 border-zinc-100" style={{ minHeight: '500px' }}>
               <iframe
                 title="Store Location"
                 src={getMapEmbedUrl()}
