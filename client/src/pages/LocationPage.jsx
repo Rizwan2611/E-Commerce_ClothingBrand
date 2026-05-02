@@ -20,15 +20,16 @@ const LocationPage = () => {
   const lat = parseFloat(shopData.lat);
   const lng = parseFloat(shopData.lng);
 
-  // High-reliability Map URL generator (Matching Admin Side logic)
+  // High-reliability Map URL generator (Prioritizing Address for better local results)
   const getMapEmbedUrl = () => {
+    if (shopData.address) {
+      // Using the address directly is often more accurate for local labels in Google Maps
+      return `https://www.google.com/maps?q=${encodeURIComponent(shopData.address)}&z=17&output=embed`;
+    }
     if (lat && lng && !isNaN(lat) && !isNaN(lng) && lat !== 0) {
       return `https://www.google.com/maps?q=${lat},${lng}&z=17&output=embed`;
     }
-    if (shopData.address) {
-      return `https://www.google.com/maps?q=${encodeURIComponent(shopData.address)}&z=17&output=embed`;
-    }
-    return `https://www.google.com/maps?q=Karachi&z=12&output=embed`;
+    return `https://www.google.com/maps?q=Mumbai&z=12&output=embed`;
   };
 
   const getDirectionsUrl = () => {
