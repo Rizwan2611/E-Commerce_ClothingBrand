@@ -12,8 +12,8 @@ const CartPage = () => {
         <div className="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center mb-6">
           <ShoppingBag size={36} className="text-zinc-600" />
         </div>
-        <h2 className="font-playfair text-2xl text-white mb-3">Your cart is empty</h2>
-        <p className="text-zinc-500 mb-8">Looks like you haven't added anything yet.</p>
+        <h2 className="font-rock-salt text-2xl text-black mb-3">Your cart is empty</h2>
+        <p className="text-zinc-600 mb-8 font-bold uppercase tracking-widest text-[10px]">Looks like you haven't added anything yet.</p>
         <Link to="/shop" className="btn-primary">Browse Products</Link>
       </div>
     );
