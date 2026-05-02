@@ -25,12 +25,15 @@ const AdminSettings = () => {
   useEffect(() => {
     adminApi.get('/admin/settings')
       .then(res => {
-        setForm(res.data.settings);
-        const { lat, lng, address } = res.data.settings;
-        if (lat && lng) {
-          setMapUrl(`https://www.google.com/maps?q=${lat},${lng}&z=16&output=embed`);
-        } else if (address) {
-          setMapUrl(`https://www.google.com/maps?q=${encodeURIComponent(address)}&z=16&output=embed`);
+        const settings = res.data.settings || {};
+        setForm(settings);
+        
+        // CRITICAL FIX: Prioritize the address text for the initial map load
+        // This ensures the map always matches the text the user sees
+        if (settings.address) {
+          setMapUrl(`https://www.google.com/maps?q=${encodeURIComponent(settings.address)}&z=17&output=embed`);
+        } else if (settings.lat && settings.lng) {
+          setMapUrl(`https://www.google.com/maps?q=${settings.lat},${settings.lng}&z=17&output=embed`);
         }
         setLoading(false);
       })
@@ -191,14 +194,21 @@ const AdminSettings = () => {
                   </div>
                   <button
                     type="button"
+                    disabled={isSearching}
                     onClick={() => setIsLocked(!isLocked)}
                     className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-tighter transition-all border-2 ${
-                      isLocked 
-                        ? 'bg-zinc-100 text-zinc-500 border-zinc-200 hover:bg-white hover:text-black hover:border-black' 
-                        : 'bg-green-400 text-black border-black shadow-lg shadow-green-400/20'
+                      isSearching
+                        ? 'bg-zinc-50 text-zinc-300 border-zinc-100 cursor-not-allowed'
+                        : isLocked 
+                          ? 'bg-zinc-100 text-zinc-500 border-zinc-200 hover:bg-white hover:text-black hover:border-black' 
+                          : 'bg-green-400 text-black border-black shadow-lg shadow-green-400/20'
                     }`}
                   >
-                    {isLocked ? <><Lock size={14} /> Unlock Address</> : <><Unlock size={14} /> Lock Location</>}
+                    {isSearching ? (
+                      <><Loader2 size={14} className="animate-spin" /> Verifying...</>
+                    ) : (
+                      isLocked ? <><Lock size={14} /> Unlock Address</> : <><Unlock size={14} /> Lock Location</>
+                    )}
                   </button>
                 </div>
                 
