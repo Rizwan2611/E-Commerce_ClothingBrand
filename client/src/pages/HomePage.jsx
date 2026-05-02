@@ -230,8 +230,8 @@ const HomePage = () => {
         </div>
 
         <div className="mt-20 pt-8 border-t border-zinc-100 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p className="text-zinc-500 font-rock-salt text-[11px] font-black uppercase tracking-[0.2em]">
-            ESTABLISHED BY THE VOID FASHION FACTION // 2026
+          <p className="text-zinc-400 font-bold text-[10px] uppercase tracking-[0.5em]">
+            &copy; {new Date().getFullYear()} Void Culture. All Rights Reserved.
           </p>
         </div>
       </footer>
