@@ -42,40 +42,36 @@ const AdminSettings = () => {
 
   // Optimized geocoding with visual feedback
   useEffect(() => {
-    if (!isLocked && form.address && form.address.trim().length > 8) {
+    // Only search if UNLOCKED and address is substantial
+    if (!isLocked && form.address && form.address.trim().length > 10) {
       if (searchTimeout.current) clearTimeout(searchTimeout.current);
       
       setIsSearching(true);
       searchTimeout.current = setTimeout(async () => {
         try {
-          // Attempt high-precision geocoding
-          const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(form.address)}&addressdetails=1&limit=1`);
+          // 1. Update the Map URL immediately using text (this is most stable)
+          setMapUrl(`https://www.google.com/maps?q=${encodeURIComponent(form.address)}&z=17&output=embed`);
+
+          // 2. Background attempt for precision coordinates (for directions feature)
+          const res = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(form.address)}&limit=1`);
           const data = await res.json();
           
           if (data && data.length > 0) {
             const newLat = parseFloat(data[0].lat);
             const newLng = parseFloat(data[0].lon);
             
-            setForm(prev => ({ 
-              ...prev, 
-              lat: newLat, 
-              lng: newLng 
-            }));
-            
-            setMapUrl(`https://www.google.com/maps?q=${newLat},${newLng}&z=17&output=embed`);
-          } else {
-            // If precision geocoding fails, fallback to raw address search directly in the map
-            // This is much more reliable as Google Maps can handle broader search terms
-            setMapUrl(`https://www.google.com/maps?q=${encodeURIComponent(form.address)}&z=17&output=embed`);
+            // Only update form if coordinates are valid and different
+            setForm(prev => {
+              if (Math.abs(prev.lat - newLat) < 0.0001 && Math.abs(prev.lng - newLng) < 0.0001) return prev;
+              return { ...prev, lat: newLat, lng: newLng };
+            });
           }
         } catch (err) {
-          console.error('Geocoding error:', err);
-          // On network error, still try to show the map using the address text
-          setMapUrl(`https://www.google.com/maps?q=${encodeURIComponent(form.address)}&z=17&output=embed`);
+          console.error('Background geocoding error:', err);
         } finally {
           setIsSearching(false);
         }
-      }, 1500); // 1.5s debounce for maximum stability while typing
+      }, 2000); // Longer 2s debounce for maximum typing stability
     }
 
     return () => {
