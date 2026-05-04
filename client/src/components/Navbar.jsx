@@ -48,7 +48,7 @@ const Navbar = () => {
               <img
                 src="/images/void-culture-logo.png"
                 alt="VOID CULTURE"
-                className="h-20 w-auto group-hover:scale-105 transition-transform duration-300 mix-blend-multiply dark:mix-blend-normal dark:invert dark:brightness-150"
+                className="h-20 w-auto group-hover:scale-105 transition-transform duration-300 invert dark:invert-0 dark:brightness-125"
               />
             </Link>
           </div>
