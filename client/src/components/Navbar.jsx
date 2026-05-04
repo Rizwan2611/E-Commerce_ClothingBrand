@@ -48,20 +48,20 @@ const Navbar = () => {
               <img
                 src="/images/void-culture-logo.png"
                 alt="VOID CULTURE"
-                className="h-20 w-auto group-hover:scale-105 transition-transform duration-300 mix-blend-multiply"
+                className="h-20 w-auto group-hover:scale-105 transition-transform duration-300 mix-blend-multiply dark:mix-blend-normal dark:invert dark:brightness-150"
               />
             </Link>
           </div>
 
           {/* Desktop Nav - Centered */}
           <div className="hidden md:flex flex-1 justify-center items-center gap-10">
-            <Link to="/" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase">
+            <Link to="/" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase dark:text-[#F4EBD0]">
               HOME
             </Link>
-            <Link to="/shop" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase">
+            <Link to="/shop" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase dark:text-[#F4EBD0]">
               SHOP
             </Link>
-            <Link to="/location" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase">
+            <Link to="/location" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase dark:text-[#F4EBD0]">
               FIND US
             </Link>
           </div>
@@ -83,7 +83,11 @@ const Navbar = () => {
 
             {/* Cart */}
             <Link to="/cart" className="relative group hover:scale-110 transition-transform duration-300">
-              <img src="/images/brush-cart.png" alt="Cart" className="h-12 w-auto mix-blend-multiply dark:invert group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.5)] transition-all duration-300" />
+              <img 
+                src="/images/brush-cart.png" 
+                alt="Cart" 
+                className="h-12 w-auto invert dark:invert-0 group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.5)] transition-all duration-300" 
+              />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 bg-amber-400 text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg border border-black transform group-hover:scale-110 transition-transform">
                   {totalItems > 9 ? '9+' : totalItems}
