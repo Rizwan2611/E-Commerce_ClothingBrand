@@ -1,8 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&family=Kufam:ital,wght@0,400..900;1,400..900&family=El+Messiri:wght@400;500;600;700&family=Rock+Salt&display=swap');
+@import url('https://fonts.cdnfonts.com/css/alhambra');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&family=El+Messiri:wght@400;500;600;700&display=swap');
 
 @import "tailwindcss";
 
 @theme {
+  /* Alhambra Heritage Font */
+  --font-alhambra: "Alhambra", system-ui;
+  
   /* Classic Arabian Heritage Palette (Dark Brown Focus) */
   --color-white: #F4EBD0; /* Weathered Parchment */
   --color-black: #1A120B; /* Midnight Date (Deep Dark Brown) */
@@ -48,7 +52,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: var(--font-rock-salt), cursive !important;
+    font-family: var(--font-alhambra), sans-serif;
   }
 
   html, body {
@@ -68,8 +72,8 @@
     color: black;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-    font-family: 'Kufam', 'El Messiri', system-ui, sans-serif;
+    -moz-osx-osx-font-smoothing: grayscale;
+    font-family: 'Alhambra', 'El Messiri', system-ui, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -165,7 +169,7 @@
   }
 
   .section-title {
-    font-family: "Kufam", system-ui;
+    font-family: "Alhambra", system-ui;
     @apply text-4xl md:text-5xl font-normal text-[#1A120B] tracking-[0.1em] transition-all duration-500;
     text-shadow: 0 0 10px rgba(233, 196, 106, 0.4), 
                  0 0 20px rgba(233, 196, 106, 0.2);
@@ -261,7 +265,7 @@
 
 @layer utilities {
   .logo-heritage {
-    font-family: "Kufam", system-ui;
+    font-family: "Alhambra", system-ui;
     @apply text-[#1A120B] transition-all duration-500 font-bold;
     text-shadow: 0 0 10px rgba(233, 196, 106, 0.4), 
                  0 0 20px rgba(233, 196, 106, 0.2);
@@ -275,7 +279,7 @@
   }
 
   .font-rock-salt {
-    font-family: "Kufam", system-ui !important;
+    font-family: "Alhambra", system-ui !important;
   }
 
   .text-balance {
