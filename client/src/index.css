@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&family=Rock+Salt&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&family=Pirata+One&family=Rock+Salt&display=swap');
 
 @import "tailwindcss";
 
@@ -33,9 +33,24 @@
   --color-red-400: #BB3E03;
 
   --font-rock-salt: "Rock Salt", cursive;
+  --font-pirata: "Pirata One", system-ui;
 }
 
 @layer base {
+  .logo-heritage {
+    font-family: "Pirata One", system-ui;
+    @apply text-[#1A120B] transition-all duration-500;
+    text-shadow: 0 0 10px rgba(233, 196, 106, 0.4), 
+                 0 0 20px rgba(233, 196, 106, 0.2);
+  }
+
+  .dark .logo-heritage {
+    @apply text-[#F4EBD0];
+    text-shadow: 0 0 15px rgba(233, 196, 106, 0.6), 
+                 0 0 30px rgba(233, 196, 106, 0.4),
+                 0 0 45px rgba(233, 196, 106, 0.2);
+  }
+
   :root {
     --color-primary: 250 250 250;
     /* Light gray / near white */

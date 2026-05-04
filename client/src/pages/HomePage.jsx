@@ -165,13 +165,11 @@ const HomePage = () => {
         <div className="max-w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand & About */}
           <div className="space-y-6">
-            <img
-              src="/images/void-culture-logo.png"
-              alt="VOID CULTURE"
-              className="h-16 w-auto mix-blend-multiply"
-            />
+            <span className="logo-heritage text-4xl block">
+              VOID CULTURE
+            </span>
             <p className="text-zinc-500 text-sm font-medium leading-relaxed">
-              Modernizing street culture with premium essentials. VOID CULTURE is more than a brand, it's a movement towards cinematic aesthetics and urban luxury.
+              Honoring Arabian craftsmanship with modern silhouettes. Discover a legacy of cinematic aesthetics and heritage luxury.
             </p>
           </div>
 
