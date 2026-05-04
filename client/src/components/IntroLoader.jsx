@@ -33,8 +33,8 @@ const IntroLoader = ({ onComplete }) => {
 
       {/* Floating Logo - Classic Heritage Branding */}
       <div className="absolute top-20 z-20 text-center animate-float">
-         <h1 className="logo-heritage text-5xl md:text-8xl font-normal tracking-tighter drop-shadow-2xl">
-            VOID CULTURE
+         <h1 className="logo-heritage text-6xl md:text-9xl font-normal tracking-[0.3em] drop-shadow-2xl">
+            HABIBI
          </h1>
          <p className="text-amber-600 font-bold uppercase tracking-[0.5em] text-[10px] mt-4">
             Classic Arabian Heritage

@@ -45,8 +45,8 @@ const Navbar = () => {
           {/* Logo Section */}
           <div className="flex-none md:flex-1 flex justify-start">
             <Link to="/" className="flex items-center gap-2 group" onClick={() => setMenuOpen(false)}>
-              <span className="logo-heritage text-3xl md:text-4xl font-normal uppercase tracking-tighter hover:scale-105 transition-transform duration-300">
-                VOID CULTURE
+              <span className="logo-heritage text-3xl md:text-5xl font-normal uppercase tracking-[0.2em] hover:scale-105 transition-transform duration-300">
+                HABIBI
               </span>
             </Link>
           </div>

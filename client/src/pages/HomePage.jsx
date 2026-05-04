@@ -43,8 +43,8 @@ const HomePage = () => {
               <Sparkles size={14} />
               <span>Heritage Drop // 2026</span>
             </div>
-            <h1 className="text-6xl md:text-8xl lg:text-9xl font-black font-rock-salt leading-[0.85] text-black tracking-tighter mix-blend-multiply mb-12">
-              VOID<br/>CULTURE
+            <h1 className="logo-heritage text-7xl md:text-9xl lg:text-[11rem] leading-[0.85] tracking-[0.2em] mb-12">
+              HABIBI
             </h1>
             <p className="text-lg md:text-xl text-zinc-600 font-medium max-w-xl mx-auto lg:mx-0 leading-relaxed mb-14 tracking-tight">
               Honoring Arabian craftsmanship with modern silhouettes. Discover a legacy of cinematic aesthetics and heritage luxury.
@@ -165,8 +165,8 @@ const HomePage = () => {
         <div className="max-w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand & About */}
           <div className="space-y-6">
-            <span className="logo-heritage text-4xl block">
-              VOID CULTURE
+            <span className="logo-heritage text-5xl block tracking-[0.2em]">
+              HABIBI
             </span>
             <p className="text-zinc-500 text-sm font-medium leading-relaxed">
               Honoring Arabian craftsmanship with modern silhouettes. Discover a legacy of cinematic aesthetics and heritage luxury.
@@ -223,7 +223,7 @@ const HomePage = () => {
 
         <div className="mt-20 pt-8 border-t border-zinc-100 flex flex-col md:flex-row justify-between items-center gap-4">
           <p className="text-zinc-400 font-bold text-[10px] uppercase tracking-[0.5em]">
-            &copy; {new Date().getFullYear()} Void Culture. All Rights Reserved.
+            &copy; {new Date().getFullYear()} HABIBI. All Rights Reserved.
           </p>
         </div>
       </footer>
