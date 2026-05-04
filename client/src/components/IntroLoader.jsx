@@ -26,23 +26,18 @@ const IntroLoader = ({ onComplete }) => {
   }, [onComplete]);
 
   return (
-    <div className={`fixed inset-0 z-[9999] bg-[#FAF9F6] flex flex-col items-center justify-center transition-all duration-1000 ease-in-out ${exit ? 'opacity-0 scale-110 pointer-events-none' : 'opacity-100'}`}>
+    <div className={`fixed inset-0 z-[9999] bg-arabesque flex flex-col items-center justify-center transition-all duration-1000 ease-in-out ${exit ? 'opacity-0 scale-110 pointer-events-none' : 'opacity-100'}`}>
       
-      {/* Dynamic Arabian Sand Grid Background */}
-      <div className="absolute inset-0 z-0 opacity-[0.1]" 
-           style={{ 
-             backgroundImage: 'linear-gradient(to right, #D4AF37 1px, transparent 1px), linear-gradient(to bottom, #D4AF37 1px, transparent 1px)', 
-             backgroundSize: '80px 80px' 
-           }} 
-      />
+      {/* Dynamic Arabian Mashrabiya Pattern */}
+      <div className="absolute inset-0 z-0 bg-arabesque opacity-[0.4]" />
 
-      {/* Floating Logo - Arabian Branding */}
+      {/* Floating Logo - Classic Heritage Branding */}
       <div className="absolute top-20 z-20 text-center animate-float">
          <h1 className="font-rock-salt text-4xl md:text-6xl text-black font-black tracking-tighter drop-shadow-md">
             VOID CULTURE
          </h1>
-         <p className="text-amber-500 font-bold uppercase tracking-[0.5em] text-[10px] mt-4">
-            Arabian Desert Experience
+         <p className="text-amber-600 font-bold uppercase tracking-[0.5em] text-[10px] mt-4">
+            Classic Arabian Heritage
          </p>
       </div>
 

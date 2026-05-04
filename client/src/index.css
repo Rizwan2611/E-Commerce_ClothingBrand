@@ -3,34 +3,34 @@
 @import "tailwindcss";
 
 @theme {
-  /* Arabian Desert Palette */
-  --color-white: #FAF9F6; /* Desert Pearl */
-  --color-black: #1A120B; /* Deep Espresso Night */
+  /* Classic Arabian Heritage Palette */
+  --color-white: #F4EBD0; /* Weathered Parchment */
+  --color-black: #1A120B; /* Midnight Date */
 
-  /* Sand & Dune Tones */
+  /* Heritage Tones */
   --color-zinc-950: #1A120B;
-  --color-zinc-900: #3C2A21; /* Warm Walnut */
-  --color-zinc-800: #D4A373; /* Golden Dune */
-  --color-zinc-700: #E9EDC9; /* Oasis Fringe */
-  --color-zinc-600: #FEFAE0; /* Sun-bleached Sand */
-  --color-zinc-500: #BDA27E; /* Muted Sand */
-  --color-zinc-400: #8B4513; /* Saddle Brown */
-  --color-zinc-300: #DEB887; /* BurlyWood */
+  --color-zinc-900: #3C2A21; /* Burnt Espresso */
+  --color-zinc-800: #B85C38; /* Deep Henna Red */
+  --color-zinc-700: #E07A5F; /* Terracotta Sunset */
+  --color-zinc-600: #F2CC8F; /* Desert Saffron */
+  --color-zinc-500: #81B29A; /* Oasis Sage */
+  --color-zinc-400: #3D405B; /* Indigo Night */
+  --color-zinc-300: #F4F1DE; /* Sandstone Cream */
 
-  /* Arabian Gold (Primary Accent) */
-  --color-amber-500: #D4AF37; /* Royal Gold */
-  --color-amber-400: #FFD700; /* Pure Gold */
-  --color-amber-300: #F9E076; /* Soft Gold */
+  /* Heritage Gold & Saffron */
+  --color-amber-500: #E9C46A; /* Vintage Saffron */
+  --color-amber-400: #F4A261; /* Sandy Ochre */
+  --color-amber-300: #E76F51; /* Burnt Sienna */
 
-  /* Oasis Teal (Contrast Accent) */
-  --color-green-500: #008080; /* Deep Oasis */
-  --color-green-400: #20B2AA; /* Light Oasis */
-  --color-green-300: #40E0D0; /* Turquoise */
+  /* Oasis Indigo & Sage */
+  --color-green-500: #2A9D8F; /* Classic Oasis */
+  --color-green-400: #264653; /* Deep Indigo Sea */
+  --color-green-300: #A8DADC; /* Morning Sky */
 
-  /* Sunset Crimson */
-  --color-red-600: #8B0000;
-  --color-red-500: #B22222;
-  --color-red-400: #FF4500;
+  /* Heritage Crimson */
+  --color-red-600: #9B2226;
+  --color-red-500: #AE2012;
+  --color-red-400: #BB3E03;
 
   --font-rock-salt: "Rock Salt", cursive;
 }
@@ -70,14 +70,14 @@
 
 @layer components {
 
-  /* Using Arabian Gold as primary accent */
+  /* Heritage Saffron primary accent */
   .btn-primary {
-    @apply bg-amber-400 hover:bg-amber-300 text-black font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-amber-400/30 active:scale-95 cursor-pointer;
+    @apply bg-amber-500 hover:bg-amber-400 text-black font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-amber-500/30 active:scale-95 cursor-pointer border border-amber-600/20;
   }
 
-  /* Using Deep Espresso */
+  /* Deep Burnt Espresso */
   .btn-secondary {
-    @apply bg-[#3C2A21] hover:bg-[#1A120B] text-[#FAF9F6] font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-[#3C2A21]/30 cursor-pointer border border-[#3C2A21];
+    @apply bg-[#3C2A21] hover:bg-[#1A120B] text-[#F4EBD0] font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-[#3C2A21]/30 cursor-pointer border border-[#3C2A21];
   }
 
   .btn-danger {
@@ -89,11 +89,11 @@
   }
 
   .card-hover {
-    @apply bg-white border border-zinc-200 rounded-2xl p-6 transition-all duration-200 hover:border-amber-400 hover:shadow-xl hover:shadow-amber-400/10 hover:-translate-y-1;
+    @apply bg-white border border-zinc-200 rounded-2xl p-6 transition-all duration-200 hover:border-amber-500 hover:shadow-xl hover:shadow-amber-500/10 hover:-translate-y-1;
   }
 
   .input-field {
-    @apply w-full bg-zinc-50 border border-zinc-300 rounded-xl px-4 py-3 text-black placeholder-zinc-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all duration-200;
+    @apply w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-black placeholder-zinc-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all duration-200;
   }
 
   .badge {
@@ -101,11 +101,11 @@
   }
 
   .badge-pending {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-400/15 text-amber-500;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-500;
   }
 
   .badge-confirmed {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-400/15 text-green-500;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/15 text-green-500;
   }
 
   .badge-processing {
@@ -113,12 +113,11 @@
   }
 
   .badge-shipped {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-400/15 text-blue-400;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-indigo-500/15 text-indigo-500;
   }
 
   .badge-delivered {
-    /* Utilizing Oasis Teal */
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#20B2AA]/15 text-[#008080];
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/15 text-green-600;
   }
 
   .badge-cancelled {
@@ -130,19 +129,19 @@
   }
 
   .glass-premium {
-    @apply bg-white/70 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_rgba(26,18,11,0.1)];
+    @apply bg-white/70 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_rgba(60,42,33,0.1)];
   }
 
   .depth-sm {
-    @apply shadow-[0_4px_12px_rgba(26,18,11,0.05)];
+    @apply shadow-[0_4px_12px_rgba(60,42,33,0.05)];
   }
 
   .depth-md {
-    @apply shadow-[0_12px_40px_rgba(26,18,11,0.1)];
+    @apply shadow-[0_12px_40px_rgba(60,42,33,0.1)];
   }
 
   .depth-lg {
-    @apply shadow-[0_30px_60px_rgba(26,18,11,0.15)];
+    @apply shadow-[0_30px_60px_rgba(60,42,33,0.15)];
   }
 
   .three-d-card {
@@ -153,7 +152,7 @@
 
   .three-d-card:hover {
     transform: perspective(1000px) rotateX(4deg) rotateY(4deg) translateZ(20px);
-    @apply shadow-[0_40px_80px_rgba(212,175,55,0.15)];
+    @apply shadow-[0_40px_80px_rgba(184,92,56,0.15)];
   }
 
   .section-title {
@@ -163,6 +162,12 @@
 
   .gradient-text {
     @apply bg-gradient-to-r from-amber-500 to-amber-300 bg-clip-text text-transparent;
+  }
+
+  /* Heritage Arabesque (Mashrabiya) Background */
+  .bg-arabesque {
+    background-color: #f4ebd0;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30c0-10 10-10 10-20S30 0 30 0s-10 0-10 10 10 10 10 20zm0 0c10 0 10 10 20 10s10-10 10-10-0-10-10-10-10 10-20 10zm0 0c0 10-10 10-10 20s10 10 10 10 10-0 10-10-10-10-10-20zm0 0c-10 0-10-10-20-10s-10 10-10 10 10 10 10 10 10-10 20-10z' fill='%23b85c38' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
   }
 
   /* Admin sidebar */

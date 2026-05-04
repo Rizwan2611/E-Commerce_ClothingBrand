@@ -30,37 +30,31 @@ const HomePage = () => {
   };
 
   return (
-    <div className="pt-24 bg-zinc-50">
+    <div className="pt-24 bg-arabesque">
       {/* 3D Hero Section */}
       <section className="relative min-h-[95vh] flex items-center justify-center overflow-hidden px-4 sm:px-6 lg:px-12 py-20">
-        {/* Arabian Sand Grid Background for Hero */}
-        <div
-          className="absolute inset-0 z-0 opacity-[0.06] pointer-events-none"
-          style={{
-            backgroundImage: 'linear-gradient(to right, #D4AF37 1px, transparent 1px), linear-gradient(to bottom, #D4AF37 1px, transparent 1px)',
-            backgroundSize: '100px 100px'
-          }}
-        />
+        {/* Mashrabiya Pattern Background */}
+        <div className="absolute inset-0 z-0 opacity-[0.3] pointer-events-none bg-arabesque" />
 
         <div className="relative z-10 max-w-full w-full flex flex-col lg:flex-row items-center gap-16 lg:gap-24">
           {/* Hero Text - Wrapped in 3D Glass Card */}
           <div className="flex-1 three-d-card glass-premium p-10 md:p-20 rounded-[4rem] border-2 border-white/50 depth-lg animate-slide-up text-center lg:text-left">
-            <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-amber-400/10 border border-amber-400/20 rounded-full text-amber-500 font-bold text-[10px] uppercase tracking-[0.5em] mb-10">
+            <div className="inline-flex items-center gap-3 px-6 py-2.5 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-600 font-bold text-[10px] uppercase tracking-[0.5em] mb-10">
               <Sparkles size={14} />
-              <span>Desert Drop // 2026</span>
+              <span>Heritage Drop // 2026</span>
             </div>
             <h1 className="text-6xl md:text-8xl lg:text-9xl font-black font-rock-salt leading-[0.85] text-black tracking-tighter mix-blend-multiply mb-12">
               VOID<br/>CULTURE
             </h1>
-            <p className="text-lg md:text-xl text-zinc-500 font-medium max-w-xl mx-auto lg:mx-0 leading-relaxed mb-14 tracking-tight">
-              Modernizing street culture with premium essentials. Discover cinematic aesthetics and urban luxury designed for those who dress with distinction.
+            <p className="text-lg md:text-xl text-zinc-600 font-medium max-w-xl mx-auto lg:mx-0 leading-relaxed mb-14 tracking-tight">
+              Honoring Arabian craftsmanship with modern silhouettes. Discover a legacy of cinematic aesthetics and heritage luxury.
             </p>
             <div className="flex flex-wrap items-center justify-center lg:justify-start gap-10">
               <Link to="/shop" className="btn-primary px-14 py-6 text-xl flex items-center gap-3 depth-md hover:depth-lg transition-all scale-105">
                 Explore Shop <ArrowRight size={24} />
               </Link>
-              <Link to="/location" className="text-black font-black font-rock-salt text-xs uppercase tracking-[0.3em] hover:text-amber-500 transition-colors border-b-2 border-black pb-1">
-                Our Oasis
+              <Link to="/location" className="text-black font-black font-rock-salt text-xs uppercase tracking-[0.3em] hover:text-amber-600 transition-colors border-b-2 border-black pb-1">
+                Our Legacy
               </Link>
             </div>
           </div>
@@ -78,8 +72,8 @@ const HomePage = () => {
             {/* Floating Secondary Card */}
             <div className="three-d-card w-[180px] md:w-[280px] aspect-[3/4] rounded-[1.5rem] md:rounded-[2rem] overflow-hidden depth-md border-2 md:border-4 border-white shadow-xl absolute z-30 right-4 md:right-0 top-0 group rotate-[12deg] hover:rotate-0 -translate-x-5 md:-translate-x-10 translate-y-10 hover:translate-y-5">
               <img src="/images/model2.jpg" alt="Hero Style" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
-              <div className="absolute inset-0 bg-gradient-to-t from-amber-400/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-4 md:p-6">
-                <span className="text-black font-rock-salt text-lg md:text-xl font-black uppercase tracking-tighter">Luxury Silks</span>
+              <div className="absolute inset-0 bg-gradient-to-t from-amber-500/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-4 md:p-6">
+                <span className="text-black font-rock-salt text-lg md:text-xl font-black uppercase tracking-tighter">Ancient Weaves</span>
               </div>
             </div>
 
@@ -92,9 +86,9 @@ const HomePage = () => {
       {/* Categories with 3D Depth */}
       <section className="py-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
         <div className="flex flex-col items-center mb-20 text-center">
-          <span className="text-xs font-[1000] text-amber-500 uppercase tracking-[0.5em] mb-4">Curated Selections</span>
+          <span className="text-xs font-[1000] text-amber-600 uppercase tracking-[0.5em] mb-4">Ancestral Selections</span>
           <h2 className="text-4xl md:text-5xl font-black font-rock-salt uppercase tracking-tighter text-black">
-            The Desert Collection
+            The Heritage Collection
           </h2>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
@@ -144,9 +138,9 @@ const HomePage = () => {
         </div>
       </section>
 
-      {/* 3D Features Section */}
-      <section className="py-32 bg-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,_rgba(80,200,120,0.05)_0%,_transparent_100%)]" />
+      {/* Heritage Features Section */}
+      <section className="py-32 bg-[#F4EBD0] relative overflow-hidden">
+        <div className="absolute inset-0 bg-arabesque opacity-[0.2]" />
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
             {[
@@ -155,11 +149,11 @@ const HomePage = () => {
               { icon: Sparkles, title: 'Premium Drop', desc: 'Elite curated styles for the modern individual' },
             ].map(({ icon: Icon, title, desc }) => (
               <div key={title} className="three-d-card group flex flex-col items-center text-center p-10 rounded-[2.5rem] bg-white border border-zinc-100 depth-md hover:depth-lg">
-                <div className="w-20 h-20 bg-zinc-50 border-2 border-zinc-100 group-hover:border-amber-400 group-hover:bg-amber-400/10 rounded-[1.5rem] flex items-center justify-center mb-8 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 shadow-inner">
-                  <Icon size={32} className="text-black group-hover:text-amber-500 transition-colors" />
+                <div className="w-20 h-20 bg-zinc-50 border-2 border-zinc-100 group-hover:border-amber-500 group-hover:bg-amber-500/10 rounded-[1.5rem] flex items-center justify-center mb-8 group-hover:scale-110 group-hover:-rotate-6 transition-all duration-500 shadow-inner">
+                  <Icon size={32} className="text-black group-hover:text-amber-600 transition-colors" />
                 </div>
-                <h3 className="text-2xl font-black text-black mb-4 tracking-tighter font-rock-salt group-hover:text-amber-500 transition-colors uppercase">{title}</h3>
-                <p className="text-zinc-500 text-sm leading-relaxed font-medium">{desc}</p>
+                <h3 className="text-2xl font-black text-black mb-4 tracking-tighter font-rock-salt group-hover:text-amber-600 transition-colors uppercase">{title}</h3>
+                <p className="text-zinc-600 text-sm leading-relaxed font-medium">{desc}</p>
               </div>
             ))}
           </div>
