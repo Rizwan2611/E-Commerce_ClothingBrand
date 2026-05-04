@@ -161,7 +161,7 @@ const HomePage = () => {
       </section>
 
       {/* Footer */}
-      <footer className="py-20 px-4 sm:px-6 lg:px-12 border-t border-zinc-100 bg-zinc-50/50">
+      <footer className="py-20 px-4 sm:px-6 lg:px-12 border-t border-amber-900/10 bg-transparent relative z-10">
         <div className="max-w-full mx-auto grid grid-cols-1 md:grid-cols-4 gap-12">
           {/* Brand & About */}
           <div className="space-y-6">

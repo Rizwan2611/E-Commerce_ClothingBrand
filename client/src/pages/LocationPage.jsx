@@ -40,15 +40,9 @@ const LocationPage = () => {
   };
 
   return (
-    <div className="pt-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-32">
-      {/* signature Arabian Sand grid background */}
-      <div 
-        className="fixed inset-0 z-0 opacity-[0.08] pointer-events-none" 
-        style={{ 
-          backgroundImage: 'linear-gradient(to right, #D4AF37 1px, transparent 1px), linear-gradient(to bottom, #D4AF37 1px, transparent 1px)', 
-          backgroundSize: '80px 80px' 
-        }} 
-      />
+    <div className="pt-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-32 bg-arabesque min-h-screen">
+      {/* Dynamic Arabian Mashrabiya Pattern */}
+      <div className="fixed inset-0 z-0 bg-arabesque opacity-[0.3] pointer-events-none" />
 
       {/* Header */}
       <div className="mb-20 text-center relative z-10">
