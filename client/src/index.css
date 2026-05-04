@@ -1,13 +1,10 @@
-@import url('https://fonts.cdnfonts.com/css/kismet');
-@import url('https://fonts.cdnfonts.com/css/alhambra');
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&family=El+Messiri:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&family=Amiri:ital,wght@0,400;0,700;1,400;1,700&family=EB+Garamond:ital,wght@0,400..800;1,400..800&family=El+Messiri:wght@400;500;600;700&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  /* Heritage Display Fonts */
-  --font-kismet: "Kismet", cursive;
-  --font-alhambra: "Alhambra", system-ui;
+  /* Professional Heritage Fonts (Adobe Arabic Style) */
+  --font-heritage: "Amiri", "EB Garamond", serif;
   
   /* Classic Arabian Heritage Palette (Dark Brown Focus) */
   --color-white: #F4EBD0; /* Weathered Parchment */
@@ -54,7 +51,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: var(--font-kismet), var(--font-alhambra), sans-serif;
+    font-family: var(--font-heritage), serif;
   }
 
   html, body {
@@ -75,7 +72,7 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-osx-font-smoothing: grayscale;
-    font-family: 'Kismet', 'Alhambra', 'El Messiri', system-ui, sans-serif;
+    font-family: 'Amiri', 'EB Garamond', 'El Messiri', serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -171,8 +168,8 @@
   }
 
   .section-title {
-    font-family: "Kismet", cursive;
-    @apply text-4xl md:text-6xl font-normal text-[#1A120B] tracking-[0.05em] transition-all duration-500;
+    font-family: "Amiri", serif;
+    @apply text-4xl md:text-6xl font-bold text-[#1A120B] tracking-[0.02em] transition-all duration-500 italic;
     text-shadow: 0 0 10px rgba(233, 196, 106, 0.4), 
                  0 0 20px rgba(233, 196, 106, 0.2);
   }
@@ -267,8 +264,8 @@
 
 @layer utilities {
   .logo-heritage {
-    font-family: "Kismet", cursive;
-    @apply text-[#1A120B] transition-all duration-500 font-normal;
+    font-family: "Amiri", serif;
+    @apply text-[#1A120B] transition-all duration-500 font-bold italic;
     text-shadow: 0 0 10px rgba(233, 196, 106, 0.4), 
                  0 0 20px rgba(233, 196, 106, 0.2);
   }
@@ -281,7 +278,7 @@
   }
 
   .font-rock-salt {
-    font-family: "Kismet", cursive !important;
+    font-family: "Amiri", serif !important;
   }
 
   .text-balance {
