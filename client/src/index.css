@@ -51,9 +51,16 @@
   }
 
   html, body {
+    @apply transition-colors duration-500;
     background-color: #F4EBD0;
     margin: 0;
     padding: 0;
+  }
+
+  /* Night Mode Base */
+  html.dark, html.dark body {
+    background-color: #1A120B;
+    color: #F4EBD0;
   }
 
   body {
@@ -169,6 +176,44 @@
   .bg-arabesque {
     background-color: #f4ebd0;
     background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30c0-10 10-10 10-20S30 0 30 0s-10 0-10 10 10 10 10 20zm0 0c10 0 10 10 20 10s10-10 10-10-0-10-10-10-10 10-20 10zm0 0c0 10-10 10-10 20s10 10 10 10 10-0 10-10-10-10-10-20zm0 0c-10 0-10-10-20-10s-10 10-10 10 10 10 10 10 10-10 20-10z' fill='%23b85c38' fill-opacity='0.03' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  .dark .bg-arabesque {
+    background-color: #1A120B;
+    background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M30 30c0-10 10-10 10-20S30 0 30 0s-10 0-10 10 10 10 10 20zm0 0c10 0 10 10 20 10s10-10 10-10-0-10-10-10-10 10-20 10zm0 0c0 10-10 10-10 20s10 10 10 10 10-0 10-10-10-10-10-20zm0 0c-10 0-10-10-20-10s-10 10-10 10 10 10 10 10 10-10 20-10z' fill='%23F4EBD0' fill-opacity='0.02' fill-rule='evenodd'/%3E%3C/svg%3E");
+  }
+
+  /* Dark mode component overrides */
+  .dark .card, .dark .bg-white {
+    background-color: #2D1E17 !important;
+    border-color: rgba(244, 235, 208, 0.1);
+  }
+
+  .dark .glass-premium {
+    background-color: rgba(26, 18, 11, 0.8) !important;
+    border-color: rgba(244, 235, 208, 0.1);
+  }
+
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark p, .dark span, .dark Link, .dark a {
+    color: #F4EBD0 !important;
+  }
+
+  .dark .text-black {
+    color: #F4EBD0 !important;
+  }
+
+  .dark .text-zinc-600, .dark .text-zinc-500 {
+    color: #F4EBD0/70 !important;
+  }
+
+  .dark .bg-zinc-50, .dark .bg-zinc-100 {
+    background-color: #3C2A21 !important;
+  }
+
+  .dark .input-field {
+    background-color: #3C2A21 !important;
+    color: #F4EBD0 !important;
+    border-color: rgba(244, 235, 208, 0.1);
   }
 
   /* Admin sidebar */
