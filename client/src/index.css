@@ -3,18 +3,18 @@
 @import "tailwindcss";
 
 @theme {
-  /* Classic Arabian Heritage Palette */
+  /* Classic Arabian Heritage Palette (Dark Brown Focus) */
   --color-white: #F4EBD0; /* Weathered Parchment */
-  --color-black: #1A120B; /* Midnight Date */
+  --color-black: #1A120B; /* Midnight Date (Deep Dark Brown) */
 
-  /* Heritage Tones */
-  --color-zinc-950: #1A120B;
-  --color-zinc-900: #3C2A21; /* Burnt Espresso */
-  --color-zinc-800: #B85C38; /* Deep Henna Red */
-  --color-zinc-700: #E07A5F; /* Terracotta Sunset */
-  --color-zinc-600: #F2CC8F; /* Desert Saffron */
-  --color-zinc-500: #81B29A; /* Oasis Sage */
-  --color-zinc-400: #3D405B; /* Indigo Night */
+  /* Heritage Earth Tones */
+  --color-zinc-950: #1A120B; /* Deep Espresso */
+  --color-zinc-900: #2D1E17; /* Roasted Coffee */
+  --color-zinc-800: #3C2A21; /* Burnt Walnut */
+  --color-zinc-700: #4B3621; /* Traditional Leather */
+  --color-zinc-600: #8B4513; /* Saddle Brown */
+  --color-zinc-500: #A0522D; /* Sienna Earth */
+  --color-zinc-400: #D2691E; /* Chocolate Clay */
   --color-zinc-300: #F4F1DE; /* Sandstone Cream */
 
   /* Heritage Gold & Saffron */
@@ -73,12 +73,12 @@
 
   /* Heritage Saffron primary accent */
   .btn-primary {
-    @apply bg-amber-500 hover:bg-amber-400 text-black font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-amber-500/30 active:scale-95 cursor-pointer border border-amber-600/20;
+    @apply bg-amber-500 hover:bg-amber-400 text-[#1A120B] font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-amber-500/30 active:scale-95 cursor-pointer border border-amber-600/20;
   }
 
-  /* Deep Burnt Espresso */
+  /* Deep Midnight Date Brown */
   .btn-secondary {
-    @apply bg-[#3C2A21] hover:bg-[#1A120B] text-[#F4EBD0] font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-[#3C2A21]/30 cursor-pointer border border-[#3C2A21];
+    @apply bg-[#1A120B] hover:bg-[#2D1E17] text-[#F4EBD0] font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-[#1A120B]/30 cursor-pointer border border-[#2D1E17];
   }
 
   .btn-danger {
@@ -86,15 +86,15 @@
   }
 
   .card {
-    @apply bg-white border border-zinc-200 rounded-2xl p-6 transition-all duration-200 shadow-sm;
+    @apply bg-white border border-[#3C2A21]/10 rounded-2xl p-6 transition-all duration-200 shadow-sm;
   }
 
   .card-hover {
-    @apply bg-white border border-zinc-200 rounded-2xl p-6 transition-all duration-200 hover:border-amber-500 hover:shadow-xl hover:shadow-amber-500/10 hover:-translate-y-1;
+    @apply bg-white border border-[#3C2A21]/10 rounded-2xl p-6 transition-all duration-200 hover:border-amber-500 hover:shadow-xl hover:shadow-[#1A120B]/10 hover:-translate-y-1;
   }
 
   .input-field {
-    @apply w-full bg-zinc-50 border border-zinc-200 rounded-xl px-4 py-3 text-black placeholder-zinc-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all duration-200;
+    @apply w-full bg-zinc-50 border border-[#3C2A21]/20 rounded-xl px-4 py-3 text-[#1A120B] placeholder-zinc-400 focus:outline-none focus:border-amber-500 focus:ring-1 focus:ring-amber-500 transition-all duration-200;
   }
 
   .badge {
@@ -102,15 +102,15 @@
   }
 
   .badge-pending {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-500;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-500/15 text-amber-600;
   }
 
   .badge-confirmed {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/15 text-green-500;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/15 text-green-600;
   }
 
   .badge-processing {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-400/15 text-zinc-500;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-900/10 text-amber-900;
   }
 
   .badge-shipped {
@@ -118,11 +118,11 @@
   }
 
   .badge-delivered {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/15 text-green-600;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-500/15 text-green-700;
   }
 
   .badge-cancelled {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-500/15 text-red-500;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-500/15 text-red-600;
   }
 
   .glass {
@@ -130,19 +130,19 @@
   }
 
   .glass-premium {
-    @apply bg-[#F4EBD0]/70 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_rgba(60,42,33,0.1)];
+    @apply bg-[#F4EBD0]/75 backdrop-blur-xl border border-[#3C2A21]/20 shadow-[0_8px_32px_rgba(26,18,11,0.15)];
   }
 
   .depth-sm {
-    @apply shadow-[0_4px_12px_rgba(60,42,33,0.05)];
+    @apply shadow-[0_4px_12px_rgba(26,18,11,0.08)];
   }
 
   .depth-md {
-    @apply shadow-[0_12px_40px_rgba(60,42,33,0.1)];
+    @apply shadow-[0_12px_40px_rgba(26,18,11,0.12)];
   }
 
   .depth-lg {
-    @apply shadow-[0_30px_60px_rgba(60,42,33,0.15)];
+    @apply shadow-[0_30px_60px_rgba(26,18,11,0.18)];
   }
 
   .three-d-card {
@@ -153,16 +153,16 @@
 
   .three-d-card:hover {
     transform: perspective(1000px) rotateX(4deg) rotateY(4deg) translateZ(20px);
-    @apply shadow-[0_40px_80px_rgba(184,92,56,0.15)];
+    @apply shadow-[0_40px_80px_rgba(26,18,11,0.2)];
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-black tracking-wide;
+    @apply text-3xl md:text-4xl font-bold text-[#1A120B] tracking-wide;
     font-family: 'Playfair Display', Georgia, serif;
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-amber-500 to-amber-300 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-amber-600 to-amber-400 bg-clip-text text-transparent;
   }
 
   /* Heritage Arabesque (Mashrabiya) Background */
