@@ -1,10 +1,12 @@
+@import url('https://fonts.cdnfonts.com/css/kismet');
 @import url('https://fonts.cdnfonts.com/css/alhambra');
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:wght@400;500;600;700;800&family=El+Messiri:wght@400;500;600;700&display=swap');
 
 @import "tailwindcss";
 
 @theme {
-  /* Alhambra Heritage Font */
+  /* Heritage Display Fonts */
+  --font-kismet: "Kismet", cursive;
   --font-alhambra: "Alhambra", system-ui;
   
   /* Classic Arabian Heritage Palette (Dark Brown Focus) */
@@ -52,7 +54,7 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    font-family: var(--font-alhambra), sans-serif;
+    font-family: var(--font-kismet), var(--font-alhambra), sans-serif;
   }
 
   html, body {
@@ -73,7 +75,7 @@
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
     -moz-osx-osx-font-smoothing: grayscale;
-    font-family: 'Alhambra', 'El Messiri', system-ui, sans-serif;
+    font-family: 'Kismet', 'Alhambra', 'El Messiri', system-ui, sans-serif;
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -169,8 +171,8 @@
   }
 
   .section-title {
-    font-family: "Alhambra", system-ui;
-    @apply text-4xl md:text-5xl font-normal text-[#1A120B] tracking-[0.1em] transition-all duration-500;
+    font-family: "Kismet", cursive;
+    @apply text-4xl md:text-6xl font-normal text-[#1A120B] tracking-[0.05em] transition-all duration-500;
     text-shadow: 0 0 10px rgba(233, 196, 106, 0.4), 
                  0 0 20px rgba(233, 196, 106, 0.2);
   }
@@ -265,8 +267,8 @@
 
 @layer utilities {
   .logo-heritage {
-    font-family: "Alhambra", system-ui;
-    @apply text-[#1A120B] transition-all duration-500 font-bold;
+    font-family: "Kismet", cursive;
+    @apply text-[#1A120B] transition-all duration-500 font-normal;
     text-shadow: 0 0 10px rgba(233, 196, 106, 0.4), 
                  0 0 20px rgba(233, 196, 106, 0.2);
   }
@@ -279,7 +281,7 @@
   }
 
   .font-rock-salt {
-    font-family: "Alhambra", system-ui !important;
+    font-family: "Kismet", cursive !important;
   }
 
   .text-balance {
