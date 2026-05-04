@@ -3,43 +3,34 @@
 @import "tailwindcss";
 
 @theme {
-  /* Base Text */
-  --color-white: #F5F5F0;
-  /* Soft off-white to complement brass */
-  --color-black: #111111;
+  /* Arabian Desert Palette */
+  --color-white: #FAF9F6; /* Desert Pearl */
+  --color-black: #1A120B; /* Deep Espresso Night */
 
-  /* Midnight Onyx Base (Imperial Byzantine Background) */
-  --color-zinc-950: #111111;
-  /* Deepest Onyx */
-  --color-zinc-900: #1A1A1A;
-  /* Midnight Onyx (Cards/Sections) */
-  --color-zinc-800: #262626;
-  /* Borders/Hover */
-  --color-zinc-700: #333333;
-  --color-zinc-600: #4D4D4D;
-  --color-zinc-500: #737373;
-  /* Muted texts */
-  --color-zinc-400: #A6A6A6;
-  --color-zinc-300: #D9D9D9;
+  /* Sand & Dune Tones */
+  --color-zinc-950: #1A120B;
+  --color-zinc-900: #3C2A21; /* Warm Walnut */
+  --color-zinc-800: #D4A373; /* Golden Dune */
+  --color-zinc-700: #E9EDC9; /* Oasis Fringe */
+  --color-zinc-600: #FEFAE0; /* Sun-bleached Sand */
+  --color-zinc-500: #BDA27E; /* Muted Sand */
+  --color-zinc-400: #8B4513; /* Saddle Brown */
+  --color-zinc-300: #DEB887; /* BurlyWood */
 
-  /* Antique Brass (Primary Accent) */
-  --color-amber-500: #B0954B;
-  --color-amber-400: #C9AE5D;
-  /* Antique Brass */
-  --color-amber-300: #D4BF7D;
+  /* Arabian Gold (Primary Accent) */
+  --color-amber-500: #D4AF37; /* Royal Gold */
+  --color-amber-400: #FFD700; /* Pure Gold */
+  --color-amber-300: #F9E076; /* Soft Gold */
 
-  /* Tyrian Purple (Secondary / Deep Accent) */
-  --color-red-600: #66023C;
-  /* Tyrian Purple */
-  --color-red-500: #7D0249;
-  /* Tyrian Purple Light */
-  --color-red-400: #940356;
+  /* Oasis Teal (Contrast Accent) */
+  --color-green-500: #008080; /* Deep Oasis */
+  --color-green-400: #20B2AA; /* Light Oasis */
+  --color-green-300: #40E0D0; /* Turquoise */
 
-  /* Emerald Jewel (Vivid Contrast) */
-  --color-green-500: #3EB465;
-  --color-green-400: #50C878;
-  /* Emerald Jewel */
-  --color-green-300: #7EDB9B;
+  /* Sunset Crimson */
+  --color-red-600: #8B0000;
+  --color-red-500: #B22222;
+  --color-red-400: #FF4500;
 
   --font-rock-salt: "Rock Salt", cursive;
 }
@@ -79,18 +70,18 @@
 
 @layer components {
 
-  /* Using Emerald Green as primary accent */
+  /* Using Arabian Gold as primary accent */
   .btn-primary {
-    @apply bg-green-400 hover:bg-green-300 text-black font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-green-400/30 active:scale-95 cursor-pointer;
+    @apply bg-amber-400 hover:bg-amber-300 text-black font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-amber-400/30 active:scale-95 cursor-pointer;
   }
 
-  /* Using Tyrian Purple */
+  /* Using Deep Espresso */
   .btn-secondary {
-    @apply bg-[#66023C] hover:bg-[#7D0249] text-[#F5F5F0] font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-[#66023C]/30 cursor-pointer border border-[#7D0249];
+    @apply bg-[#3C2A21] hover:bg-[#1A120B] text-[#FAF9F6] font-semibold px-6 py-3 rounded-xl transition-all duration-200 shadow-lg hover:shadow-[#3C2A21]/30 cursor-pointer border border-[#3C2A21];
   }
 
   .btn-danger {
-    @apply bg-[#66023C] hover:bg-[#7D0249] text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 cursor-pointer;
+    @apply bg-red-600 hover:bg-red-500 text-white font-semibold px-6 py-3 rounded-xl transition-all duration-200 cursor-pointer;
   }
 
   .card {
@@ -98,11 +89,11 @@
   }
 
   .card-hover {
-    @apply bg-white border border-zinc-200 rounded-2xl p-6 transition-all duration-200 hover:border-green-400 hover:shadow-xl hover:shadow-green-400/10 hover:-translate-y-1;
+    @apply bg-white border border-zinc-200 rounded-2xl p-6 transition-all duration-200 hover:border-amber-400 hover:shadow-xl hover:shadow-amber-400/10 hover:-translate-y-1;
   }
 
   .input-field {
-    @apply w-full bg-zinc-50 border border-zinc-300 rounded-xl px-4 py-3 text-black placeholder-zinc-400 focus:outline-none focus:border-green-400 focus:ring-1 focus:ring-green-400 transition-all duration-200;
+    @apply w-full bg-zinc-50 border border-zinc-300 rounded-xl px-4 py-3 text-black placeholder-zinc-400 focus:outline-none focus:border-amber-400 focus:ring-1 focus:ring-amber-400 transition-all duration-200;
   }
 
   .badge {
@@ -110,29 +101,28 @@
   }
 
   .badge-pending {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-400/15 text-amber-400;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-400/15 text-amber-500;
   }
 
   .badge-confirmed {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-400/15 text-blue-400;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-green-400/15 text-green-500;
   }
 
   .badge-processing {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-purple-400/15 text-purple-400;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-zinc-400/15 text-zinc-500;
   }
 
   .badge-shipped {
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-cyan-400/15 text-cyan-400;
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-blue-400/15 text-blue-400;
   }
 
   .badge-delivered {
-    /* Utilizing Emerald Jewel */
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#50C878]/15 text-[#50C878];
+    /* Utilizing Oasis Teal */
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#20B2AA]/15 text-[#008080];
   }
 
   .badge-cancelled {
-    /* Utilizing Tyrian Purple */
-    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-[#66023C]/20 text-[#D47BA4];
+    @apply inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-500/15 text-red-500;
   }
 
   .glass {
@@ -140,19 +130,19 @@
   }
 
   .glass-premium {
-    @apply bg-white/70 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_rgba(0,0,0,0.1)];
+    @apply bg-white/70 backdrop-blur-xl border border-white/30 shadow-[0_8px_32px_rgba(26,18,11,0.1)];
   }
 
   .depth-sm {
-    @apply shadow-[0_4px_12px_rgba(0,0,0,0.05)];
+    @apply shadow-[0_4px_12px_rgba(26,18,11,0.05)];
   }
 
   .depth-md {
-    @apply shadow-[0_12px_40px_rgba(0,0,0,0.1)];
+    @apply shadow-[0_12px_40px_rgba(26,18,11,0.1)];
   }
 
   .depth-lg {
-    @apply shadow-[0_30px_60px_rgba(0,0,0,0.15)];
+    @apply shadow-[0_30px_60px_rgba(26,18,11,0.15)];
   }
 
   .three-d-card {
@@ -163,16 +153,16 @@
 
   .three-d-card:hover {
     transform: perspective(1000px) rotateX(4deg) rotateY(4deg) translateZ(20px);
-    @apply shadow-[0_40px_80px_rgba(80,200,120,0.15)];
+    @apply shadow-[0_40px_80px_rgba(212,175,55,0.15)];
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-white tracking-wide;
+    @apply text-3xl md:text-4xl font-bold text-black tracking-wide;
     font-family: 'Playfair Display', Georgia, serif;
   }
 
   .gradient-text {
-    @apply bg-gradient-to-r from-green-400 to-green-300 bg-clip-text text-transparent;
+    @apply bg-gradient-to-r from-amber-500 to-amber-300 bg-clip-text text-transparent;
   }
 
   /* Admin sidebar */

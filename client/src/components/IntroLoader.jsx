@@ -26,23 +26,23 @@ const IntroLoader = ({ onComplete }) => {
   }, [onComplete]);
 
   return (
-    <div className={`fixed inset-0 z-[9999] bg-zinc-50 flex flex-col items-center justify-center transition-all duration-1000 ease-in-out ${exit ? 'opacity-0 scale-110 pointer-events-none' : 'opacity-100'}`}>
+    <div className={`fixed inset-0 z-[9999] bg-[#FAF9F6] flex flex-col items-center justify-center transition-all duration-1000 ease-in-out ${exit ? 'opacity-0 scale-110 pointer-events-none' : 'opacity-100'}`}>
       
-      {/* Dynamic Grid Background - Matching Main Site */}
-      <div className="absolute inset-0 z-0 opacity-[0.08]" 
+      {/* Dynamic Arabian Sand Grid Background */}
+      <div className="absolute inset-0 z-0 opacity-[0.1]" 
            style={{ 
-             backgroundImage: 'linear-gradient(to right, #50C878 1px, transparent 1px), linear-gradient(to bottom, #50C878 1px, transparent 1px)', 
+             backgroundImage: 'linear-gradient(to right, #D4AF37 1px, transparent 1px), linear-gradient(to bottom, #D4AF37 1px, transparent 1px)', 
              backgroundSize: '80px 80px' 
            }} 
       />
 
-      {/* Floating Logo - Black Branding */}
+      {/* Floating Logo - Arabian Branding */}
       <div className="absolute top-20 z-20 text-center animate-float">
-         <h1 className="font-rock-salt text-4xl md:text-6xl text-black font-black tracking-tighter mix-blend-multiply drop-shadow-md">
+         <h1 className="font-rock-salt text-4xl md:text-6xl text-black font-black tracking-tighter drop-shadow-md">
             VOID CULTURE
          </h1>
-         <p className="text-green-500 font-bold uppercase tracking-[0.5em] text-[10px] mt-4">
-            Cinematic Streetwear Experience
+         <p className="text-amber-500 font-bold uppercase tracking-[0.5em] text-[10px] mt-4">
+            Arabian Desert Experience
          </p>
       </div>
 
@@ -55,19 +55,19 @@ const IntroLoader = ({ onComplete }) => {
               className="absolute inset-0 w-full h-full rounded-2xl md:rounded-3xl border-2 md:border-4 border-white overflow-hidden shadow-2xl backface-hidden"
               style={{
                 transform: `rotateY(${i * (360 / images.length)}deg) translateZ(var(--gallery-depth))`,
-                boxShadow: '0 20px 50px rgba(0,0,0,0.1)'
+                boxShadow: '0 20px 50px rgba(60,42,33,0.15)'
               }}
             >
               <img src={src} alt="Product" className="w-full h-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-t from-[#1A120B]/60 via-transparent to-transparent" />
             </div>
           ))}
         </div>
       </div>
 
-      {/* Loading Progress Bar - Light Theme */}
-      <div className="absolute bottom-20 w-48 md:w-64 h-1.5 bg-zinc-200 rounded-full overflow-hidden border border-zinc-300">
-        <div className="h-full bg-green-400 animate-progress-full shadow-[0_0_10px_#50C878]" />
+      {/* Loading Progress Bar - Sand Theme */}
+      <div className="absolute bottom-20 w-48 md:w-64 h-1.5 bg-zinc-200/50 rounded-full overflow-hidden border border-amber-200">
+        <div className="h-full bg-amber-500 animate-progress-full shadow-[0_0_15px_#D4AF37]" />
       </div>
 
       <style jsx>{`

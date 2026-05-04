@@ -34,13 +34,13 @@ const Navbar = () => {
 
           {/* Desktop Nav - Centered */}
           <div className="hidden md:flex flex-1 justify-center items-center gap-10">
-            <Link to="/" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-green-500 transition-all duration-300 uppercase">
+            <Link to="/" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase">
               HOME
             </Link>
-            <Link to="/shop" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-green-500 transition-all duration-300 uppercase">
+            <Link to="/shop" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase">
               SHOP
             </Link>
-            <Link to="/location" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-green-500 transition-all duration-300 uppercase">
+            <Link to="/location" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase">
               FIND US
             </Link>
           </div>
@@ -49,9 +49,9 @@ const Navbar = () => {
           <div className="flex-1 flex items-center justify-end gap-3">
             {/* Cart */}
             <Link to="/cart" className="relative group hover:scale-110 transition-transform duration-300">
-              <img src="/images/brush-cart.png" alt="Cart" className="h-12 w-auto mix-blend-multiply group-hover:drop-shadow-[0_0_8px_rgba(80,200,120,0.5)] transition-all duration-300" />
+              <img src="/images/brush-cart.png" alt="Cart" className="h-12 w-auto mix-blend-multiply group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.5)] transition-all duration-300" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-green-400 text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg border border-black transform group-hover:scale-110 transition-transform">
+                <span className="absolute -top-1 -right-1 bg-amber-400 text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg border border-black transform group-hover:scale-110 transition-transform">
                   {totalItems > 9 ? '9+' : totalItems}
                 </span>
               )}
@@ -62,16 +62,16 @@ const Navbar = () => {
               <div className="relative">
                 <button
                   onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center gap-2 bg-zinc-100 hover:bg-green-50 border-2 border-black hover:border-green-400 px-3 py-2 rounded-xl text-sm text-black transition-all duration-300"
+                  className="flex items-center gap-2 bg-zinc-100 hover:bg-amber-50 border-2 border-black hover:border-amber-400 px-3 py-2 rounded-xl text-sm text-black transition-all duration-300"
                 >
-                  <User size={16} className="text-green-400" />
+                  <User size={16} className="text-amber-500" />
                   <span className="hidden sm:block">{customer.name.split(' ')[0]}</span>
                 </button>
                 {dropdownOpen && (
                   <div className="absolute right-0 top-12 bg-white border border-black rounded-xl shadow-2xl w-48 py-2 animate-fade-in">
                     <Link
                       to="/orders"
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-700 hover:text-green-500 hover:bg-green-50"
+                      className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-700 hover:text-amber-500 hover:bg-amber-50"
                       onClick={() => setDropdownOpen(false)}
                     >
                       <Package size={14} /> My Orders
@@ -93,7 +93,7 @@ const Navbar = () => {
 
             {/* Mobile menu toggle */}
             <button
-              className="md:hidden p-2 text-zinc-600 hover:text-green-400 transition-colors"
+              className="md:hidden p-2 text-zinc-600 hover:text-amber-500 transition-colors"
               onClick={() => setMenuOpen(!menuOpen)}
             >
               {menuOpen ? <X size={22} /> : <Menu size={22} />}
@@ -106,17 +106,17 @@ const Navbar = () => {
       {menuOpen && (
         <div className="md:hidden bg-white border-t border-black animate-slide-up shadow-lg">
           <div className="px-4 py-8 space-y-6 flex flex-col items-center">
-            <Link to="/" onClick={() => setMenuOpen(false)} className="text-3xl font-black hover:scale-110 hover:text-green-400 transition-all uppercase">
+            <Link to="/" onClick={() => setMenuOpen(false)} className="text-3xl font-black hover:scale-110 hover:text-amber-500 transition-all uppercase">
               HOME
             </Link>
-            <Link to="/shop" onClick={() => setMenuOpen(false)} className="text-3xl font-black hover:scale-110 hover:text-green-400 transition-all uppercase">
+            <Link to="/shop" onClick={() => setMenuOpen(false)} className="text-3xl font-black hover:scale-110 hover:text-amber-500 transition-all uppercase">
               SHOP
             </Link>
-            <Link to="/location" onClick={() => setMenuOpen(false)} className="text-3xl font-black hover:scale-110 hover:text-green-400 transition-all uppercase">
+            <Link to="/location" onClick={() => setMenuOpen(false)} className="text-3xl font-black hover:scale-110 hover:text-amber-500 transition-all uppercase">
               FIND US
             </Link>
             {customer && (
-              <Link to="/orders" onClick={() => setMenuOpen(false)} className="text-black font-black font-rock-salt text-xl uppercase tracking-widest pt-4 hover:text-green-400 transition-colors">My Orders</Link>
+              <Link to="/orders" onClick={() => setMenuOpen(false)} className="text-black font-black font-rock-salt text-xl uppercase tracking-widest pt-4 hover:text-amber-500 transition-colors">My Orders</Link>
             )}
           </div>
         </div>
