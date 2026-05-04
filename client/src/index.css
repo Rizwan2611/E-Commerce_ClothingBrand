@@ -179,8 +179,7 @@
   }
 
   .section-title {
-    @apply text-3xl md:text-4xl font-bold text-[#1A120B] tracking-wide;
-    font-family: 'Playfair Display', Georgia, serif;
+    @apply text-4xl md:text-5xl font-normal text-[#1A120B] tracking-[0.1em] logo-heritage;
   }
 
   .gradient-text {
@@ -265,6 +264,10 @@
 }
 
 @layer utilities {
+  .font-rock-salt {
+    font-family: "Pirata One", system-ui !important;
+  }
+
   .text-balance {
     text-wrap: balance;
   }

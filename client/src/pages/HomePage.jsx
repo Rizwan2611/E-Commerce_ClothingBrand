@@ -99,7 +99,7 @@ const HomePage = () => {
                 <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               </div>
               <div className="flex justify-center items-center pb-4">
-                <span className="text-xl font-[1000] uppercase tracking-tighter text-black group-hover:text-amber-600 transition-all duration-300">
+                <span className="logo-heritage text-2xl uppercase tracking-tighter hover:text-amber-600 transition-all duration-300">
                   {cat.name}
                 </span>
               </div>
