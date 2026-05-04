@@ -92,14 +92,14 @@ const HomePage = () => {
           </h2>
         </div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-8 max-w-6xl mx-auto">
-          {categories.map((cat) => (
-            <Link key={cat.name} to={cat.path} className="three-d-card group bg-white rounded-[2rem] p-4 border border-zinc-100 depth-sm hover:depth-lg flex flex-col">
+          {categories.map((cat, i) => (
+            <Link key={cat.name} to={cat.path} className={`three-d-card group bg-white rounded-[2rem] p-4 border border-zinc-100 depth-sm hover:depth-lg flex flex-col animate-slide-up reveal-stagger-${(i % 4) + 1}`}>
               <div className="w-full aspect-[4/5] rounded-[1.5rem] overflow-hidden mb-6 relative shadow-inner">
-                <div className="absolute inset-0 bg-black/5 group-hover:bg-amber-400/10 transition-colors duration-500 z-10" />
+                <div className="absolute inset-0 bg-black/5 group-hover:bg-amber-500/10 transition-colors duration-500 z-10" />
                 <img src={cat.image} alt={cat.name} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" />
               </div>
               <div className="flex justify-center items-center pb-4">
-                <span className="text-xl font-[1000] uppercase tracking-tighter text-black group-hover:text-amber-500 transition-all duration-300">
+                <span className="text-xl font-[1000] uppercase tracking-tighter text-black group-hover:text-amber-600 transition-all duration-300">
                   {cat.name}
                 </span>
               </div>
