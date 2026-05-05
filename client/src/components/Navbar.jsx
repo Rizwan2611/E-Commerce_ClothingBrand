@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, User, LogOut, Package, Sun, Moon } from 'lucide-react';
+import { Menu, X, User, LogOut, Package } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
@@ -9,28 +9,7 @@ const Navbar = () => {
   const { totalItems } = useCart();
   const [menuOpen, setMenuOpen] = useState(false);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const [isDark, setIsDark] = useState(document.documentElement.classList.contains('dark'));
   const navigate = useNavigate();
-
-  const toggleTheme = () => {
-    const newDark = !isDark;
-    setIsDark(newDark);
-    if (newDark) {
-      document.documentElement.classList.add('dark');
-      localStorage.setItem('theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      localStorage.setItem('theme', 'light');
-    }
-  };
-
-  useEffect(() => {
-    const savedTheme = localStorage.getItem('theme');
-    if (savedTheme === 'dark') {
-      document.documentElement.classList.add('dark');
-      setIsDark(true);
-    }
-  }, []);
 
   const handleLogout = () => {
     logout();
@@ -66,22 +45,9 @@ const Navbar = () => {
 
           {/* Actions - Right */}
           <div className="flex-1 flex items-center justify-end gap-3">
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="p-3 bg-[#1A120B]/5 hover:bg-[#1A120B]/10 dark:bg-white/5 dark:hover:bg-white/10 rounded-full transition-all duration-300 border border-[#1A120B]/10 dark:border-white/10 group active:scale-90"
-              aria-label="Toggle Theme"
-            >
-              {isDark ? (
-                <Sun size={20} className="text-amber-400 group-hover:rotate-45 transition-transform duration-500" />
-              ) : (
-                <Moon size={20} className="text-[#1A120B] group-hover:-rotate-12 transition-transform duration-500" />
-              )}
-            </button>
-
             {/* Cart */}
             <Link to="/cart" className="relative group hover:scale-110 transition-transform duration-300">
-              <img src="/images/brush-cart.png" alt="Cart" className="h-12 w-auto mix-blend-multiply dark:invert group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.5)] transition-all duration-300" />
+              <img src="/images/brush-cart.png" alt="Cart" className="h-12 w-auto mix-blend-multiply group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.5)] transition-all duration-300" />
               {totalItems > 0 && (
                 <span className="absolute -top-1 -right-1 bg-amber-400 text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg border border-black transform group-hover:scale-110 transition-transform">
                   {totalItems > 9 ? '9+' : totalItems}
