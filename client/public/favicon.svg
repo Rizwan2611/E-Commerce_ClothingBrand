@@ -1,4 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- Background Circle: Habibi Premium Ink Brown -->
   <rect width="100" height="100" rx="50" fill="#2A221B"/>
-  <text x="50%" y="62%" font-family="Scheherazade New, Georgia, serif" font-size="55" font-weight="bold" fill="#E6DED4" dominant-baseline="middle" text-anchor="middle">H</text>
+  
+  <!-- Symmetrical Geometric Crown: Habibi Premium Canvas Cream -->
+  <g fill="#E6DED4">
+    <!-- Lower Base Bar -->
+    <rect x="29" y="80" width="42" height="6" rx="1"/>
+    
+    <!-- Upper Base Bar -->
+    <rect x="24" y="70" width="52" height="6" rx="1"/>
+    
+    <!-- Central Peak (Large Inverted V / Chevron) -->
+    <path d="M 50 14 L 68 49 L 59 49 L 50 31 L 41 49 L 32 49 Z"/>
+    
+    <!-- Central Inner Support (Smaller Nested Chevron) -->
+    <path d="M 50 38 L 57 52 L 51 52 L 50 50 L 49 52 L 43 52 Z"/>
+    
+    <!-- Left Wing / Outer Peak -->
+    <path d="M 37 19 L 44 33 L 39 41 L 32 27 L 25 41 L 18 27 L 12 39 L 23 61 L 28 61 L 20 45 L 25 35 L 32 49 L 37 49 L 46 31 L 42 23 Z"/>
+    <path d="M 23 45 L 30 59 L 35 59 L 28 45 Z"/>
+    
+    <!-- Right Wing / Outer Peak -->
+    <path d="M 63 19 L 56 33 L 61 41 L 68 27 L 75 41 L 82 27 L 88 39 L 77 61 L 72 61 L 80 45 L 75 35 L 68 49 L 63 49 L 54 31 L 58 23 Z"/>
+    <path d="M 77 45 L 70 59 L 65 59 L 72 45 Z"/>
+  </g>
 </svg>
