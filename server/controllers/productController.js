@@ -49,9 +49,10 @@ const getProduct = asyncHandler(async (req, res) => {
 const createProduct = asyncHandler(async (req, res) => {
   const { title, description, price, category, subCategory, sizes, colors, stock, tags } = req.body;
 
+  const baseUrl = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 5001}`;
   const images = req.files
     ? req.files.map((file) => ({
-        url: file.location || `http://localhost:5001/uploads/${file.filename}`,
+        url: file.location || `${baseUrl}/uploads/${file.filename}`,
         key: file.key || file.filename,
       }))
     : [];
@@ -86,8 +87,9 @@ const updateProduct = asyncHandler(async (req, res) => {
   // Handle new images
   let images = product.images;
   if (req.files && req.files.length > 0) {
+    const baseUrl = process.env.BACKEND_URL || `http://localhost:${process.env.PORT || 5001}`;
     const newImages = req.files.map((file) => ({ 
-      url: file.location || `http://localhost:5001/uploads/${file.filename}`, 
+      url: file.location || `${baseUrl}/uploads/${file.filename}`, 
       key: file.key || file.filename 
     }));
     images = [...images, ...newImages];
@@ -210,7 +212,7 @@ const adminGetProducts = asyncHandler(async (req, res) => {
 
 // @desc  Create product review
 // @route POST /api/products/:id/reviews
-// @access Private
+// @access Private (Customer)
 const createProductReview = async (req, res) => {
   const { rating, comment } = req.body;
   const product = await Product.findById(req.params.id);
@@ -220,7 +222,7 @@ const createProductReview = async (req, res) => {
   }
 
   const alreadyReviewed = product.reviews.find(
-    (r) => r.user.toString() === req.user._id.toString()
+    (r) => r.user.toString() === req.customer._id.toString()
   );
 
   if (alreadyReviewed) {
@@ -228,10 +230,10 @@ const createProductReview = async (req, res) => {
   }
 
   const review = {
-    name: req.user.name,
+    name: req.customer.name,
     rating: Number(rating),
     comment,
-    user: req.user._id,
+    user: req.customer._id,
   };
 
   product.reviews.push(review);

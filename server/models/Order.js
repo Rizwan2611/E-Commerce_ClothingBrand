@@ -89,9 +89,7 @@ orderSchema.pre('save', async function () {
     const count = await mongoose.model('Order').countDocuments();
     this.orderId = `ORD-${String(count + 1).padStart(6, '0')}`;
   }
-  if (this.isModified('status')) {
-    this.statusHistory.push({ status: this.status });
-  }
+  // NOTE: statusHistory is managed explicitly by controllers to avoid duplicates
 });
 
 module.exports = mongoose.model('Order', orderSchema);
