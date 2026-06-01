@@ -262,18 +262,24 @@ const getAnalytics = async (req, res) => {
     Order.find().sort('-createdAt').limit(5).populate('customer', 'name email'),
   ]);
 
+  const totals = totalStats[0] || {
+    totalRevenue: 0,
+    totalOrders: 0,
+    deliveredOrders: 0,
+    pendingOrders: 0,
+    cancelledOrders: 0,
+  };
+
+  // Calculate Success Rate dynamically based on delivered orders over non-cancelled orders
+  const nonCancelled = totals.totalOrders - totals.cancelledOrders;
+  totals.successRate = nonCancelled > 0 ? (totals.deliveredOrders / nonCancelled) * 100 : 0;
+
   res.json({
     success: true,
     analytics: {
       salesData,
       statusBreakdown,
-      totals: totalStats[0] || {
-        totalRevenue: 0,
-        totalOrders: 0,
-        deliveredOrders: 0,
-        pendingOrders: 0,
-        cancelledOrders: 0,
-      },
+      totals,
       recentOrders,
       period,
     },

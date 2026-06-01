@@ -23,7 +23,7 @@ const AdminDashboard = () => {
     { label: 'Total Revenue', value: `Rs ${data?.totals?.totalRevenue?.toLocaleString() || 0}`, icon: DollarSign },
     { label: 'Total Orders', value: data?.totals?.totalOrders || 0, icon: ShoppingBag },
     { label: 'Pending Orders', value: data?.totals?.pendingOrders || 0, icon: Package },
-    { label: 'Success Rate', value: '98.4%', icon: Truck },
+    { label: 'Success Rate', value: `${data?.totals?.successRate !== undefined ? data.totals.successRate.toFixed(1) : '0.0'}%`, icon: Truck },
   ];
 
   return (
