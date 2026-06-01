@@ -78,4 +78,45 @@ const sendOrderCancelledNotification = async (order) => {
   return sendWhatsAppNotification(message);
 };
 
-module.exports = { sendNewOrderNotification, sendOrderCancelledNotification };
+const sendWhatsAppToCustomer = async (number, message) => {
+  try {
+    if (!client || !process.env.TWILIO_WHATSAPP_FROM) {
+      console.log(`[WhatsApp - DEV MODE] Would send to ${number}:`, message);
+      return { success: true, dev: true };
+    }
+
+    const result = await client.messages.create({
+      from: process.env.TWILIO_WHATSAPP_FROM,
+      to: `whatsapp:${number}`,
+      body: message,
+    });
+
+    return { success: true, sid: result.sid };
+  } catch (error) {
+    console.error('WhatsApp customer notification failed:', error.message);
+    return { success: false, error: error.message };
+  }
+};
+
+const sendTrackingLinkNotification = async (order, trackingUrl) => {
+  const message = `
+✨ *HABIBI BOUTIQUE | LOGISTICS PULSE*
+
+Your acquisition *${order.orderId}* has entered the heritage transit.
+
+📍 *TRACK YOUR JOURNEY:*
+${trackingUrl}
+
+We are committed to delivering your piece within our absolute 48-hour window.
+
+*Heritage . Identity . Future*
+`.trim();
+
+  return sendWhatsAppToCustomer(order.customerDetails.phone, message);
+};
+
+module.exports = { 
+  sendNewOrderNotification, 
+  sendOrderCancelledNotification,
+  sendTrackingLinkNotification 
+};

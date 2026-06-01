@@ -12,68 +12,70 @@ const ProductCard = ({ product }) => {
   };
 
   return (
-    <Link to={`/product/${product._id}`} className="group block perspective-1000">
-      <div className="three-d-card overflow-hidden !p-0 depth-sm hover:depth-lg rounded-2xl bg-white border border-zinc-200">
+    <Link to={`/product/${product._id}`} className="group block interactive">
+      <div className="card-minimal shadow-premium overflow-hidden !p-0 rounded-sm transition-[box-shadow] duration-300 hover:shadow-deep">
         {/* Image Container with 3D Parallax */}
-        <div className="relative aspect-[3/4] overflow-hidden bg-zinc-50 border-b-2 border-zinc-100 p-8 flex items-center justify-center transition-all duration-500 group-hover:bg-green-50/30">
+        <div className="relative aspect-[4/5] overflow-hidden bg-canvas/20 flex items-center justify-center transition-all duration-300">
           {product.images?.[0]?.url ? (
             <img
               src={product.images[0].url}
               alt={product.title}
-              className="max-w-[85%] max-h-[85%] object-contain group-hover:scale-125 group-hover:-translate-y-4 group-hover:rotate-6 transition-all duration-700 ease-out drop-shadow-xl group-hover:drop-shadow-[0_20px_40px_rgba(0,0,0,0.2)]"
-              style={{ transformStyle: 'preserve-3d', transform: 'translateZ(50px)' }}
+              className="max-w-[90%] max-h-[90%] object-contain group-hover:scale-110 transition-all duration-500 ease-[cubic-bezier(0.22,1,0.36,1)]"
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center" style={{ transform: 'translateZ(50px)' }}>
-              <ShoppingBag size={48} className="text-zinc-300" />
+            <div className="w-full h-full flex items-center justify-center">
+              <ShoppingBag size={48} className="text-ink/10" />
             </div>
           )}
+          
+          {/* Glassy Overlay on Hover */}
+          <div className="absolute inset-0 bg-ink/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 backdrop-blur-md" />
+
           {/* Stock badge */}
           {product.stock === 0 && (
-            <div className="absolute inset-0 bg-black/60 flex items-center justify-center">
-              <span className="text-white font-[1000] text-xs bg-red-600 px-3 py-1 rounded-lg uppercase">Out of Stock</span>
+            <div className="absolute inset-0 bg-ink/60 flex items-center justify-center backdrop-blur-lg">
+              <span className="text-canvas font-black text-[10px] tracking-[0.3em] uppercase">Sold Out</span>
             </div>
           )}
-          {/* Category tag */}
-          <div className="absolute top-3 left-3">
-            <span className="px-2 py-1 bg-white border border-black text-black text-[10px] font-[1000] uppercase tracking-tighter shadow-sm group-hover:bg-green-400 group-hover:border-green-400 group-hover:text-black transition-all duration-300">
+
+          {/* Category tag - Staggered reveal */}
+          <div className="absolute top-6 left-6 translate-y-4 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+            <span className="text-whisper text-accent font-black tracking-widest uppercase bg-canvas/40 px-3 py-1 backdrop-blur-md border border-white/20 rounded-sm">
               {product.category}
             </span>
           </div>
-          {/* Quick add */}
+
+          {/* Quick add - Heavy Glassy button */}
           <button
             onClick={handleQuickAdd}
             disabled={product.stock === 0}
-            className="absolute bottom-3 right-3 bg-green-400 text-black p-2.5 rounded-xl opacity-0 group-hover:opacity-100 transition-all duration-200 disabled:opacity-0 shadow-xl hover:bg-green-300 hover:scale-110"
+            className="absolute bottom-6 right-6 bg-white/10 backdrop-blur-2xl border border-white/40 shadow-[0_8px_32px_rgba(42,34,27,0.1)] p-4 opacity-0 translate-y-4 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 delay-75 disabled:opacity-0 interactive rounded-sm"
           >
-            <ShoppingBag size={16} />
+            <ShoppingBag size={14} className="text-ink" />
           </button>
         </div>
 
         {/* Info */}
-        <div className="p-6 flex flex-col min-h-[150px] bg-white">
+        <div className="p-8 flex flex-col min-h-[160px] bg-canvas border-t border-ink/5">
           <div className="flex-1">
-            <p className="text-black font-[1000] text-xs uppercase tracking-[0.2em] line-clamp-1 mb-3 group-hover:text-green-500 transition-colors duration-300">
+            <p className="text-whisper !text-[12px] font-black mb-6 group-hover:text-accent transition-colors duration-500 tracking-wider">
               {product.title}
             </p>
             {/* Sizes preview */}
-            <div className="min-h-[28px] mb-4">
+            <div className="min-h-[24px] mb-6 translate-y-2 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-700 delay-300">
               {product.sizes?.length > 0 && (
-                <div className="flex gap-2">
+                <div className="flex flex-wrap gap-2">
                   {product.sizes.slice(0, 4).map((s) => (
-                    <span key={s} className="text-[9px] px-2.5 py-1.5 bg-zinc-50 text-zinc-500 border border-zinc-100 rounded-lg font-bold uppercase tracking-widest group-hover:border-green-400/20 group-hover:bg-green-50 transition-colors duration-300">
+                    <span key={s} className="text-[9px] px-3 py-1 bg-ink/5 text-ink border border-ink/10 rounded-sm font-black uppercase tracking-tighter">
                       {s}
                     </span>
                   ))}
-                  {product.sizes.length > 4 && (
-                    <span className="text-[9px] px-2.5 py-1.5 bg-zinc-50 text-zinc-400 border border-zinc-100 rounded-lg font-bold uppercase tracking-widest">+{product.sizes.length - 4}</span>
-                  )}
                 </div>
               )}
             </div>
           </div>
-          <p className="text-black font-[1000] text-2xl tracking-tighter group-hover:text-green-500 transition-colors duration-300">
-            <span className="text-sm mr-1">Rs</span>
+          <p className="text-whisper text-accent font-black tracking-widest text-lg">
+            <span className="opacity-40 mr-2 italic lowercase font-normal text-xs">rs.</span>
             {product.price.toLocaleString()}
           </p>
         </div>

@@ -33,3 +33,9 @@ logs/
 # OS
 .DS_Store
 Thumbs.db
+
+# Security
+*firebase-adminsdk*.json
+
+# Agents
+.agents/

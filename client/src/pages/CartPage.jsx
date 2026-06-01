@@ -1,6 +1,6 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft } from 'lucide-react';
+import { Minus, Plus, Trash2, ShoppingBag, ArrowLeft, X } from 'lucide-react';
 
 const CartPage = () => {
   const { cart, removeFromCart, updateQuantity, totalPrice, clearCart } = useCart();
@@ -8,104 +8,106 @@ const CartPage = () => {
 
   if (cart.length === 0) {
     return (
-      <div className="pt-24 min-h-screen flex flex-col items-center justify-center px-4 text-center">
-        <div className="w-20 h-20 bg-zinc-900 rounded-full flex items-center justify-center mb-6">
-          <ShoppingBag size={36} className="text-zinc-600" />
-        </div>
-        <h2 className="font-rock-salt text-2xl text-black mb-3">Your cart is empty</h2>
-        <p className="text-zinc-600 mb-8 font-bold uppercase tracking-widest text-[10px]">Looks like you haven't added anything yet.</p>
-        <Link to="/shop" className="btn-primary">Browse Products</Link>
+      <div className="bg-canvas min-h-screen flex flex-col items-center justify-center px-4 text-center section-quiet">
+        <p className="text-whisper mb-12">Your selection is currently empty</p>
+        <Link to="/shop" className="text-whisper text-accent border-b border-accent pb-1 interactive">Browse Archive</Link>
       </div>
     );
   }
 
   return (
-    <div className="pt-24 max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20">
-      <div className="flex items-center justify-between mb-8">
-        <h1 className="section-title">Shopping Cart</h1>
-        <button onClick={clearCart} className="text-zinc-500 hover:text-red-400 text-sm flex items-center gap-1 transition-colors">
-          <Trash2 size={14} /> Clear Cart
+    <div className="bg-canvas geometric-grid min-h-screen section-quiet px-6 sm:px-12 lg:px-24">
+      <div className="bg-grain opacity-[0.03]" />
+
+      <div className="mb-20 pt-24 md:pt-32 text-center flex flex-col items-center">
+        <p className="text-whisper mb-6 opacity-60">Selections</p>
+        <h1 className="logo-heritage text-3xl sm:text-5xl md:text-6xl text-ink mb-6 tracking-widest">The Bag</h1>
+        <div className="w-24 h-px bg-accent/30 mb-12" />
+        <button onClick={clearCart} className="text-whisper opacity-40 hover:opacity-100 hover:text-ink transition-all flex items-center gap-4 interactive">
+          <Trash2 size={12} /> Clear Archive
         </button>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
         {/* Cart Items */}
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-8 space-y-12">
           {cart.map((item, i) => (
-            <div key={`${item.productId}-${item.size}-${item.color}`} className="card flex gap-4 !p-4 hover:border-green-400/30 transition-colors">
+            <div key={`${item.productId}-${item.size}-${item.color}`} className="flex flex-col sm:flex-row gap-12 border-b border-border pb-12 animate-fade-in">
               {/* Image */}
-              <div className="w-20 h-24 bg-zinc-800 rounded-xl overflow-hidden shrink-0 group cursor-pointer" onClick={() => navigate(`/product/${item.productId}`)}>
+              <div className="w-40 aspect-[3/4] overflow-hidden border border-border grayscale hover:grayscale-0 transition-all duration-1000 shrink-0 cursor-pointer" onClick={() => navigate(`/product/${item.productId}`)}>
                 {item.image ? (
-                  <img src={item.image} alt={item.title} className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" />
+                  <img src={item.image} alt={item.title} className="w-full h-full object-cover transition-transform duration-[2s]" />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center">
-                    <ShoppingBag size={24} className="text-zinc-600" />
+                  <div className="w-full h-full bg-border/5 flex items-center justify-center">
+                    <ShoppingBag size={24} className="text-mute" />
                   </div>
                 )}
               </div>
 
               {/* Info */}
-              <div className="flex-1 min-w-0">
-                <h3 className="text-white font-semibold text-sm leading-tight line-clamp-2 mb-1">{item.title}</h3>
-                <div className="flex gap-2 mb-3">
-                  {item.size && <span className="badge bg-zinc-700 text-zinc-300">{item.size}</span>}
-                  {item.color && <span className="badge bg-zinc-700 text-zinc-300">{item.color}</span>}
+              <div className="flex-1 flex flex-col justify-between">
+                <div>
+                  <div className="flex justify-between items-start mb-6">
+                    <h3 className="logo-heritage text-3xl text-ink tracking-tight">{item.title}</h3>
+                    <button onClick={() => removeFromCart(item.productId, item.size, item.color)} className="text-mute hover:text-ink transition-all">
+                      <X size={16} />
+                    </button>
+                  </div>
+                  <div className="flex gap-8 mb-8">
+                    {item.size && <span className="text-whisper font-black text-accent">{item.size}</span>}
+                    {item.color && <span className="text-whisper font-black text-accent">{item.color}</span>}
+                  </div>
                 </div>
+
                 <div className="flex items-center justify-between">
                   {/* Quantity */}
-                  <div className="flex items-center gap-2 bg-zinc-800 rounded-xl p-1">
+                  <div className="flex items-center gap-8 border border-border px-4 py-2">
                     <button onClick={() => {
                       if (item.quantity === 1) removeFromCart(item.productId, item.size, item.color);
                       else updateQuantity(item.productId, item.size, item.color, item.quantity - 1);
-                    }} className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-green-400 rounded-lg hover:bg-zinc-700 transition-colors">
-                      <Minus size={14} />
+                    }} className="text-mute hover:text-accent transition-colors">
+                      <Minus size={12} />
                     </button>
-                    <span className="text-white text-sm font-semibold w-5 text-center">{item.quantity}</span>
+                    <span className="text-whisper w-4 text-center">{item.quantity}</span>
                     <button onClick={() => updateQuantity(item.productId, item.size, item.color, item.quantity + 1)}
-                      className="w-7 h-7 flex items-center justify-center text-zinc-400 hover:text-green-400 rounded-lg hover:bg-zinc-700 transition-colors">
-                      <Plus size={14} />
+                      className="text-mute hover:text-accent transition-colors">
+                      <Plus size={12} />
                     </button>
                   </div>
                   {/* Price */}
-                  <div className="text-right">
-                    <p className="text-green-400 font-bold">Rs. {(item.price * item.quantity).toLocaleString()}</p>
-                    <p className="text-zinc-600 text-xs">Rs. {item.price.toLocaleString()} each</p>
-                  </div>
+                  <p className="text-whisper text-accent text-lg">
+                    <span className="opacity-40 italic mr-2">rs.</span>
+                    {(item.price * item.quantity).toLocaleString()}
+                  </p>
                 </div>
               </div>
-
-              {/* Remove */}
-              <button onClick={() => removeFromCart(item.productId, item.size, item.color)}
-                className="text-zinc-600 hover:text-red-400 transition-colors self-start">
-                <Trash2 size={16} />
-              </button>
             </div>
           ))}
         </div>
 
         {/* Order Summary */}
-        <div className="lg:col-span-1">
-          <div className="card sticky top-24">
-            <h3 className="font-playfair text-xl font-bold text-white mb-6">Order Summary</h3>
-            <div className="space-y-3 mb-6">
-              <div className="flex justify-between text-zinc-400 text-sm">
-                <span>Subtotal ({cart.reduce((s, i) => s + i.quantity, 0)} items)</span>
+        <div className="lg:col-span-4">
+          <div className="border border-border p-12 bg-ink/5">
+            <p className="text-whisper mb-12 font-black">Summary</p>
+            <div className="space-y-6 mb-12">
+              <div className="flex justify-between text-whisper opacity-60 font-bold">
+                <span>Subtotal ({cart.reduce((s, i) => s + i.quantity, 0)} units)</span>
                 <span>Rs. {totalPrice.toLocaleString()}</span>
               </div>
-              <div className="flex justify-between text-zinc-400 text-sm">
-                <span>Delivery</span>
-                <span className="text-green-400">Free</span>
+              <div className="flex justify-between text-whisper opacity-60 font-bold">
+                <span>Logistics</span>
+                <span className="text-accent italic lowercase">Included</span>
               </div>
-              <div className="border-t border-zinc-800 pt-3 flex justify-between text-white font-bold">
+              <div className="border-t border-ink/10 pt-6 flex justify-between text-whisper text-2xl font-black">
                 <span>Total</span>
-                <span className="text-green-400 text-xl">Rs. {totalPrice.toLocaleString()}</span>
+                <span className="text-accent">Rs. {totalPrice.toLocaleString()}</span>
               </div>
             </div>
-            <button id="checkout-btn" onClick={() => navigate('/checkout')} className="btn-primary w-full text-center">
-              Proceed to Checkout
+            <button onClick={() => navigate('/checkout')} className="btn-primary w-full">
+              Proceed to Acquisition
             </button>
-            <Link to="/shop" className="flex items-center justify-center gap-2 text-zinc-500 hover:text-green-400 text-sm mt-4 transition-colors">
-              <ArrowLeft size={14} /> Continue Shopping
+            <Link to="/shop" className="flex items-center justify-center gap-4 text-whisper opacity-40 hover:opacity-100 transition-all mt-8 interactive">
+              <ArrowLeft size={12} /> Continue Discovery
             </Link>
           </div>
         </div>

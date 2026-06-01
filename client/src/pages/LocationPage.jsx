@@ -40,102 +40,78 @@ const LocationPage = () => {
   };
 
   return (
-    <div className="pt-32 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto pb-32 bg-arabesque min-h-screen">
-      {/* Dynamic Arabian Mashrabiya Pattern */}
-      <div className="fixed inset-0 z-0 bg-arabesque opacity-[0.3] pointer-events-none" />
+    <div className="bg-canvas geometric-grid min-h-screen section-quiet px-6 sm:px-12 lg:px-24">
+      <div className="bg-grain opacity-[0.03]" />
 
-      {/* Header */}
-      <div className="mb-20 text-center relative z-10">
-        <span className="text-xs font-[1000] text-amber-500 uppercase tracking-[0.5em] mb-4 block">Visit the Oasis</span>
-        <h1 className="font-rock-salt text-4xl md:text-5xl font-black text-black uppercase tracking-tighter drop-shadow-sm">
-          Find Our Culture
-        </h1>
-        <p className="text-zinc-400 text-[10px] font-bold uppercase tracking-[0.3em] mt-4">Experience the Void in Person</p>
+      {/* Header: Geometric Silence */}
+      <div className="mb-20 pt-24 md:pt-32 text-center flex flex-col items-center reveal-hidden">
+        <p className="text-whisper mb-6 opacity-60">Atelier . Presence</p>
+        <h1 className="logo-heritage text-3xl sm:text-5xl md:text-6xl text-ink mb-6 tracking-widest">Contact</h1>
+        <div className="w-24 h-px bg-accent/30 mb-6" />
+        <p className="text-whisper opacity-80">Direct . Inquiry . Location</p>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10 relative z-10">
-        {/* Contact Info */}
-        <div className="space-y-8">
-          <div className="glass-premium rounded-[2.5rem] p-10 border-2 border-white/50 depth-lg">
-            <h3 className="text-xl font-[1000] text-black mb-10 uppercase tracking-widest border-b border-zinc-100 pb-6 flex items-center gap-3">
-              <Phone size={20} className="text-amber-500" />
-              Contact Info
-            </h3>
-            <div className="space-y-10">
-              <div className="flex gap-6 group">
-                <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center shrink-0 shadow-xl group-hover:scale-110 transition-transform">
-                  <MapPin size={24} className="text-amber-400" />
-                </div>
-                <div>
-                  <p className="text-black font-[1000] text-[10px] uppercase tracking-widest mb-2">Our Studio</p>
-                  <p className="text-zinc-500 text-xs font-bold leading-relaxed tracking-tight">
-                    {shopData.address || 'Void Sector, Karachi'}
-                  </p>
-                </div>
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24 relative z-10">
+        {/* Contact Info System */}
+        <div className="lg:col-span-4 space-y-16 reveal-hidden">
+          <div className="border border-border p-12 space-y-12 bg-canvas">
+            <p className="text-whisper mb-12 font-black">Channel . 01</p>
+            
+            <div className="space-y-12">
+              <div className="group interactive">
+                <p className="text-whisper text-[10px] text-accent mb-4 font-black">The Studio</p>
+                <p className="font-body text-ink text-sm leading-loose italic font-medium">
+                  {shopData.address || 'Void Sector, Karachi'}
+                </p>
               </div>
               
-              <div className="flex gap-6 group">
-                <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center shrink-0 shadow-xl group-hover:scale-110 transition-transform">
-                  <Phone size={24} className="text-amber-400" />
-                </div>
-                <div>
-                  <p className="text-black font-[1000] text-[10px] uppercase tracking-widest mb-2">Call Us</p>
-                  <a href={`tel:${shopData.phone}`} className="text-zinc-500 text-xs font-bold hover:text-black transition-colors tracking-tight">
-                    {shopData.phone || '+92 300 0000000'}
-                  </a>
-                </div>
+              <div className="group interactive">
+                <p className="text-whisper text-[10px] text-accent mb-4 font-black">Voice Signature</p>
+                <a href={`tel:${shopData.phone}`} className="font-body text-ink text-sm italic hover:text-accent transition-colors font-medium">
+                  {shopData.phone || '+92 300 0000000'}
+                </a>
               </div>
 
-              <div className="flex gap-6 group">
-                <div className="w-14 h-14 bg-black text-white rounded-2xl flex items-center justify-center shrink-0 shadow-xl group-hover:scale-110 transition-transform">
-                  <Mail size={24} className="text-amber-400" />
-                </div>
-                <div>
-                  <p className="text-black font-[1000] text-[10px] uppercase tracking-widest mb-2">Email Inquiries</p>
-                  <a href={`mailto:${shopData.email}`} className="text-zinc-500 text-xs font-bold hover:text-black transition-colors tracking-tight">
-                    {shopData.email || 'hello@voidculture.pk'}
-                  </a>
-                </div>
+              <div className="group interactive">
+                <p className="text-whisper text-[10px] text-accent mb-4 font-black">Digital Inquiry</p>
+                <a href={`mailto:${shopData.email}`} className="font-body text-ink text-sm italic hover:text-accent transition-colors font-medium">
+                  {shopData.email || 'hello@voidculture.pk'}
+                </a>
               </div>
             </div>
           </div>
 
-          <div className="bg-[#1A120B] rounded-[2.5rem] p-10 depth-md text-white border-2 border-black relative overflow-hidden group">
-            <div className="absolute inset-0 bg-amber-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
-            <h3 className="text-sm font-[1000] text-amber-400 mb-6 uppercase tracking-[0.4em] relative z-10">Store Hours</h3>
-            <div className="space-y-4 relative z-10">
-              <div className="flex items-start gap-4">
-                <Clock className="text-zinc-500" size={18} />
-                <div className="text-xs font-bold leading-relaxed tracking-widest uppercase text-zinc-300">
-                  Mon — Sat: 10AM — 9PM<br />
-                  Sun: 12PM — 7PM
-                </div>
-              </div>
+          <div className="border border-border p-12 bg-ink/5">
+            <p className="text-whisper mb-8 font-black">Operational . Cycle</p>
+            <div className="space-y-4">
+              <p className="text-whisper text-[10px] text-ink/80 lowercase font-bold">Mon — Sat: 10AM — 9PM</p>
+              <p className="text-whisper text-[10px] text-ink/80 lowercase font-bold">Sun: 12PM — 7PM</p>
             </div>
           </div>
 
-          {/* Directions Button */}
-          <a
-            href={getDirectionsUrl()}
-            target="_blank"
-            rel="noreferrer"
-            className="group w-full bg-black text-white py-6 rounded-[2rem] flex items-center justify-center gap-4 text-xs font-[1000] uppercase tracking-widest hover:bg-zinc-800 transition-all shadow-2xl shadow-black/20 active:scale-95 border-2 border-black"
-          >
-            <Navigation size={18} className="text-amber-400 group-hover:translate-x-1 group-hover:-translate-y-1 transition-transform" />
-            Navigate to Oasis
-          </a>
+          <div className="pt-4 pb-12">
+            <a
+              href={getDirectionsUrl()}
+              target="_blank"
+              rel="noreferrer"
+              className="inline-flex w-[85%] max-w-sm bg-ink text-canvas py-5 px-8 items-center justify-between hover:bg-accent transition-colors duration-500 font-black tracking-[0.3em] uppercase interactive group rounded-sm shadow-premium"
+            >
+              <span>Locate Studio</span>
+              <Navigation size={18} className="text-canvas ml-4 group-hover:translate-x-2 group-hover:-translate-y-2 transition-transform duration-500" />
+            </a>
+          </div>
         </div>
 
-        {/* Google Maps Embed */}
-        <div className="lg:col-span-2">
-          <div className="bg-white border-2 border-black rounded-[3rem] p-4 h-full min-h-[500px] shadow-2xl shadow-black/5 relative overflow-hidden">
-            <div className="w-full h-full rounded-[2.5rem] overflow-hidden border-2 border-zinc-100" style={{ minHeight: '500px' }}>
+        {/* Satellite Imagery Embed */}
+        <div className="lg:col-span-8 reveal-hidden">
+          <div className="border border-border p-2 h-full min-h-[600px] grayscale hover:grayscale-0 transition-all duration-[2s]">
+            <div className="w-full h-full overflow-hidden border border-border" style={{ minHeight: '600px' }}>
               <iframe
                 title="Store Location"
                 src={getMapEmbedUrl()}
                 width="100%"
                 height="100%"
-                style={{ border: 0, minHeight: '500px' }}
+                style={{ border: 0, minHeight: '600px' }}
                 allowFullScreen
                 loading="lazy"
                 referrerPolicy="no-referrer-when-downgrade"

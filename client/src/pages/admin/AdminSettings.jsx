@@ -19,7 +19,6 @@ const AdminSettings = () => {
   const [isLocked, setIsLocked] = useState(true);
   const [isSearching, setIsSearching] = useState(false);
   const searchTimeout = useRef(null);
-  // Stabilized Map URL state to prevent unnecessary iframe flickering
   const [mapUrl, setMapUrl] = useState('');
 
   useEffect(() => {
@@ -27,9 +26,6 @@ const AdminSettings = () => {
       .then(res => {
         const settings = res.data.settings || {};
         setForm(settings);
-        
-        // CRITICAL FIX: Prioritize the address text for the initial map load
-        // This ensures the map always matches the text the user sees
         if (settings.address) {
           setMapUrl(`https://www.google.com/maps?q=${encodeURIComponent(settings.address)}&z=17&output=embed`);
         } else if (settings.lat && settings.lng) {
@@ -37,10 +33,7 @@ const AdminSettings = () => {
         }
         setLoading(false);
       })
-      .catch(err => {
-        toast.error('Failed to load settings');
-        setLoading(false);
-      });
+      .catch(() => { toast.error('Failed to load settings'); setLoading(false); });
   }, []);
 
   // Optimized geocoding with visual feedback
@@ -84,18 +77,16 @@ const AdminSettings = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!isLocked) {
-      return toast.error('Please lock the location to verify your shop address');
-    }
+    if (!isLocked) return toast.error('Please lock the location to verify your shop address');
     setSaving(true);
     try {
       await adminApi.put('/admin/settings', form);
       toast.success('Store settings updated');
-    } catch (err) {
-      toast.error('Failed to save settings');
-    } finally {
-      setSaving(false);
+    } catch (err) { 
+      const msg = err.response?.data?.message || 'Failed to save settings';
+      toast.error(msg); 
     }
+    finally { setSaving(false); }
   };
 
   if (loading) return (
@@ -105,31 +96,31 @@ const AdminSettings = () => {
   );
 
   return (
-    <AdminLayout title="Settings">
-      <div className="max-w-4xl mx-auto pb-20">
-        <div className="bg-white border-2 border-black rounded-[3rem] shadow-2xl shadow-black/5 overflow-hidden">
-          {/* Settings Header */}
-          <div className="p-10 border-b-2 border-black flex items-center justify-between bg-zinc-50/50">
+    <AdminLayout title="System Configuration">
+      <div className="max-w-4xl mx-auto pb-32">
+        <div className="border border-ink/10 bg-canvas relative overflow-hidden">
+          {/* Settings Header Protocol */}
+          <div className="p-12 border-b border-ink/10 flex items-center justify-between bg-ink/[0.01]">
             <div>
-              <h2 className="text-2xl font-bold text-black flex items-center gap-3">
-                <Settings className="text-black" size={24} />
-                Store Settings
-              </h2>
-              <p className="text-zinc-400 text-sm mt-1">Manage your store information and location</p>
+              <div className="flex items-center gap-4 mb-4">
+                <div className="w-2 h-2 bg-accent" />
+                <h2 className="text-whisper text-[10px] font-bold uppercase tracking-[0.4em] text-ink">Store . Protocol</h2>
+              </div>
+              <p className="text-whisper text-[11px] opacity-40 font-mono">Archive . Identity . Management</p>
             </div>
           </div>
 
-          <form onSubmit={handleSubmit} className="p-10 space-y-10">
+          <form onSubmit={handleSubmit} className="p-12 space-y-16">
             
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16">
               {/* Shop Name */}
-              <div className="md:col-span-2">
-                <label className="block text-black font-bold text-sm mb-3 flex items-center gap-2">
-                  <Store size={16} className="text-zinc-400" /> Shop Name
+              <div className="md:col-span-2 space-y-4">
+                <label className="text-whisper text-[9px] text-ink opacity-40 uppercase tracking-widest flex items-center gap-3">
+                  <Store size={12} /> System Identity
                 </label>
                 <input
                   type="text"
-                  className="w-full bg-zinc-50 border-2 border-zinc-100 focus:border-black rounded-2xl py-4 px-6 text-sm font-medium focus:outline-none transition-all"
+                  className="w-full bg-transparent border-b border-ink/10 focus:border-accent py-4 text-sm font-medium focus:outline-none transition-all text-ink uppercase tracking-widest"
                   value={form.shopName}
                   onChange={e => setForm({...form, shopName: e.target.value})}
                   required
@@ -137,13 +128,13 @@ const AdminSettings = () => {
               </div>
 
               {/* Email */}
-              <div>
-                <label className="block text-black font-bold text-sm mb-3 flex items-center gap-2">
-                  <Mail size={16} className="text-zinc-400" /> Email Address
+              <div className="space-y-4">
+                <label className="text-whisper text-[9px] text-ink opacity-40 uppercase tracking-widest flex items-center gap-3">
+                  <Mail size={12} /> Digital Matrix
                 </label>
                 <input
                   type="email"
-                  className="w-full bg-zinc-50 border-2 border-zinc-100 focus:border-black rounded-2xl py-4 px-6 text-sm font-medium focus:outline-none transition-all"
+                  className="w-full bg-transparent border-b border-ink/10 focus:border-accent py-4 text-sm font-medium focus:outline-none transition-all text-ink font-mono"
                   value={form.email}
                   onChange={e => setForm({...form, email: e.target.value})}
                   required
@@ -151,13 +142,13 @@ const AdminSettings = () => {
               </div>
 
               {/* Phone */}
-              <div>
-                <label className="block text-black font-bold text-sm mb-3 flex items-center gap-2">
-                  <Phone size={16} className="text-zinc-400" /> Phone Number
+              <div className="space-y-4">
+                <label className="text-whisper text-[9px] text-ink opacity-40 uppercase tracking-widest flex items-center gap-3">
+                  <Phone size={12} /> Contact Protocol
                 </label>
                 <input
                   type="text"
-                  className="w-full bg-zinc-50 border-2 border-zinc-100 focus:border-black rounded-2xl py-4 px-6 text-sm font-medium focus:outline-none transition-all"
+                  className="w-full bg-transparent border-b border-ink/10 focus:border-accent py-4 text-sm font-medium focus:outline-none transition-all text-ink font-mono"
                   value={form.phone}
                   onChange={e => setForm({...form, phone: e.target.value})}
                   required
@@ -165,49 +156,49 @@ const AdminSettings = () => {
               </div>
 
               {/* Instagram */}
-              <div className="md:col-span-2">
-                <label className="block text-black font-bold text-sm mb-3 flex items-center gap-2">
-                  <Globe size={16} className="text-zinc-400" /> Instagram Profile (URL or Handle)
+              <div className="md:col-span-2 space-y-4">
+                <label className="text-whisper text-[9px] text-ink opacity-40 uppercase tracking-widest flex items-center gap-3">
+                  <Globe size={12} /> Social Resonance
                 </label>
                 <input
                   type="text"
-                  className="w-full bg-zinc-50 border-2 border-zinc-100 focus:border-black rounded-2xl py-4 px-6 text-sm font-medium focus:outline-none transition-all"
+                  className="w-full bg-transparent border-b border-ink/10 focus:border-accent py-4 text-sm font-medium focus:outline-none transition-all text-ink"
                   value={form.instagram}
                   onChange={e => setForm({...form, instagram: e.target.value})}
-                  placeholder="e.g. https://instagram.com/voidculture or @voidculture"
+                  placeholder="ARCHIVE_ID..."
                 />
               </div>
 
               {/* Full Address Section */}
-              <div className="md:col-span-2 pt-6 border-t-2 border-zinc-50">
-                <div className="flex items-center justify-between mb-6">
-                  <div>
-                    <label className="block text-black font-bold text-sm flex items-center gap-2">
-                      <Globe size={16} className="text-black" /> 
-                      Store Address & Location
+              <div className="md:col-span-2 pt-12 border-t border-ink/5">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-8 mb-10">
+                  <div className="space-y-2">
+                    <label className="text-whisper text-[9px] text-accent font-bold uppercase tracking-[0.4em] flex items-center gap-4">
+                      <MapPin size={12} /> 
+                      Geographic . Anchor
                     </label>
-                    <p className="text-xs text-zinc-400 mt-1">
+                    <p className="text-[9px] text-ink opacity-20 uppercase tracking-widest">
                       {isLocked 
-                        ? "Address is locked. Unlock to change location." 
-                        : "Start typing; the map will find your shop instantly."}
+                        ? "Protocol Locked . Unlock to redefine location" 
+                        : "Synchronizing Matrix . Define address to update anchor"}
                     </p>
                   </div>
                   <button
                     type="button"
                     disabled={isSearching}
                     onClick={() => setIsLocked(!isLocked)}
-                    className={`flex items-center gap-2 px-6 py-2.5 rounded-xl text-xs font-black uppercase tracking-tighter transition-all border-2 ${
+                    className={`flex items-center justify-center gap-4 px-8 py-4 text-[9px] font-bold uppercase tracking-[0.3em] transition-all border interactive ${
                       isSearching
-                        ? 'bg-zinc-50 text-zinc-300 border-zinc-100 cursor-not-allowed'
+                        ? 'border-ink/10 text-ink/20 cursor-not-allowed'
                         : isLocked 
-                          ? 'bg-zinc-100 text-zinc-500 border-zinc-200 hover:bg-white hover:text-black hover:border-black' 
-                          : 'bg-green-400 text-black border-black shadow-lg shadow-green-400/20'
+                          ? 'border-ink/20 text-ink hover:bg-ink hover:text-canvas' 
+                          : 'bg-accent border-accent text-canvas'
                     }`}
                   >
                     {isSearching ? (
-                      <><Loader2 size={14} className="animate-spin" /> Verifying...</>
+                      <><Loader2 size={12} className="animate-spin" /> Verifying...</>
                     ) : (
-                      isLocked ? <><Lock size={14} /> Unlock Address</> : <><Unlock size={14} /> Lock Location</>
+                      isLocked ? <><Lock size={12} /> Override Location</> : <><Unlock size={12} /> Lock Matrix</>
                     )}
                   </button>
                 </div>
@@ -215,24 +206,24 @@ const AdminSettings = () => {
                 <div className="relative group">
                   <textarea
                     disabled={isLocked}
-                    className={`w-full border-2 rounded-3xl py-6 px-8 text-sm font-medium focus:outline-none transition-all min-h-[120px] ${
+                    className={`w-full border border-ink/10 py-8 px-10 text-sm font-medium focus:outline-none transition-all min-h-[120px] uppercase tracking-widest ${
                       isLocked 
-                        ? 'bg-zinc-50 border-zinc-100 text-zinc-500 cursor-not-allowed' 
-                        : 'bg-white border-black text-black shadow-xl shadow-black/5'
+                        ? 'bg-ink/[0.01] text-ink opacity-30 cursor-not-allowed' 
+                        : 'bg-transparent border-accent text-ink'
                     }`}
                     value={form.address}
                     onChange={e => setForm({...form, address: e.target.value})}
                     required
-                    placeholder="Enter your full store address (e.g. Studio 404, Void Sector, Karachi)"
+                    placeholder="ENTER PHYSICAL ADDRESS PROTOCOL..."
                   />
                   {!isLocked && (
-                    <div className="absolute top-4 right-6 flex items-center gap-2">
+                    <div className="absolute top-6 right-10 flex items-center gap-4">
                       {isSearching ? (
-                        <div className="flex items-center gap-2 text-green-500 text-[10px] font-black uppercase">
-                          <Loader2 size={14} className="animate-spin" /> Searching...
+                        <div className="flex items-center gap-3 text-accent text-[9px] font-bold uppercase tracking-widest">
+                          <Loader2 size={12} className="animate-spin" /> Synchronizing...
                         </div>
                       ) : (
-                        <div className="text-zinc-300">
+                        <div className="text-ink/20">
                           <Search size={18} />
                         </div>
                       )}
@@ -241,45 +232,51 @@ const AdminSettings = () => {
                 </div>
 
                 {/* Google Maps Embed Preview */}
-                <div className="mt-8">
-                  <div className="h-96 w-full rounded-[3rem] overflow-hidden border-2 border-black shadow-2xl relative">
+                <div className="mt-12">
+                  <div className="h-96 w-full border border-ink/10 relative overflow-hidden">
                     {!isLocked && (
-                      <div className="absolute top-6 left-1/2 -translate-x-1/2 z-10 bg-black/80 backdrop-blur-md text-white px-6 py-2 rounded-full text-[10px] font-black uppercase tracking-widest border border-white/20 flex items-center gap-2">
-                        <span className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                        Live Search Active
+                      <div className="absolute top-8 left-1/2 -translate-x-1/2 z-10 bg-canvas/90 backdrop-blur-md text-accent px-8 py-3 text-[9px] font-bold uppercase tracking-[0.4em] border border-accent/20 flex items-center gap-4">
+                        <div className="w-1.5 h-1.5 bg-accent rounded-full animate-pulse" />
+                        Live . Sync . Active
                       </div>
                     )}
-                    <iframe
-                      title="Store Location"
-                      src={mapUrl}
-                      width="100%"
-                      height="100%"
-                      style={{ border: 0 }}
-                      allowFullScreen
-                      loading="lazy"
-                      referrerPolicy="no-referrer-when-downgrade"
-                    />
+                    {mapUrl ? (
+                      <iframe
+                        title="Store Location"
+                        src={mapUrl}
+                        width="100%"
+                        height="100%"
+                        style={{ border: 0, filter: 'grayscale(1) invert(0.9) contrast(1.2)' }}
+                        allowFullScreen
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                      />
+                    ) : (
+                      <div className="w-full h-full bg-ink/[0.02] flex items-center justify-center text-ink/20 text-[9px] uppercase tracking-widest">
+                        Awaiting Geographic Pulse...
+                      </div>
+                    )}
                   </div>
                 </div>
               </div>
               
             </div>
 
-            <div className="flex justify-end pt-10 border-t-2 border-black">
+            <div className="flex justify-end pt-12 border-t border-ink/10">
               <button 
                 type="submit" 
                 disabled={saving || !isLocked}
-                className="group bg-black text-white px-12 py-5 rounded-[2rem] text-sm font-bold flex items-center gap-4 hover:bg-zinc-800 transition-all shadow-2xl shadow-black/20 active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-ink text-canvas px-16 py-6 text-[10px] font-bold uppercase tracking-[0.4em] flex items-center gap-6 transition-all interactive hover:bg-accent disabled:opacity-30 disabled:cursor-not-allowed"
               >
                 {saving ? (
                   <>
-                    <Loader2 size={20} className="animate-spin" />
-                    <span>Saving...</span>
+                    <Loader2 size={16} className="animate-spin" />
+                    <span>Processing...</span>
                   </>
                 ) : (
                   <>
-                    <Save size={20} className="group-hover:scale-110 transition-transform" /> 
-                    Save Settings
+                    <Save size={16} /> 
+                    Synchronize Configuration
                   </>
                 )}
               </button>

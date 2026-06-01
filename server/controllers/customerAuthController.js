@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const Customer = require('../models/Customer');
+const asyncHandler = require('express-async-handler');
 
 const generateToken = (id) => {
   return jwt.sign({ id, role: 'customer' }, process.env.JWT_SECRET, {
@@ -10,37 +11,31 @@ const generateToken = (id) => {
 // @desc  Register a new customer
 // @route POST /api/auth/register
 // @access Public
-const register = async (req, res) => {
-  const { name, email, password, phone } = req.body;
-
-  if (!name || !email || !password) {
-    return res.status(400).json({ success: false, message: 'Name, email and password are required' });
+const register = asyncHandler(async (req, res) => {
+  // We use this route to sync the profile details AFTER Firebase auth creation
+  const { name, phone } = req.body;
+  
+  if (req.customer) {
+    req.customer.name = name || req.customer.name;
+    req.customer.phone = phone || req.customer.phone;
+    await req.customer.save();
   }
 
-  const existingCustomer = await Customer.findOne({ email });
-  if (existingCustomer) {
-    return res.status(400).json({ success: false, message: 'Email already registered' });
-  }
-
-  const customer = await Customer.create({ name, email, password, phone });
-  const token = generateToken(customer._id);
-
-  res.status(201).json({
+  res.status(200).json({
     success: true,
-    token,
     customer: {
-      _id: customer._id,
-      name: customer.name,
-      email: customer.email,
-      phone: customer.phone,
+      _id: req.customer._id,
+      name: req.customer.name,
+      email: req.customer.email,
+      phone: req.customer.phone,
     },
   });
-};
+});
 
 // @desc  Login customer
 // @route POST /api/auth/login
 // @access Public
-const login = async (req, res) => {
+const login = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -68,12 +63,12 @@ const login = async (req, res) => {
       phone: customer.phone,
     },
   });
-};
+});
 
 // @desc  Get current customer profile
 // @route GET /api/auth/me
 // @access Private (Customer)
-const getMe = async (req, res) => {
+const getMe = asyncHandler(async (req, res) => {
   res.json({
     success: true,
     customer: {
@@ -84,6 +79,6 @@ const getMe = async (req, res) => {
       createdAt: req.customer.createdAt,
     },
   });
-};
+});
 
 module.exports = { register, login, getMe };

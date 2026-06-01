@@ -1,15 +1,17 @@
 const Product = require('../models/Product');
 const { DeleteObjectCommand } = require('@aws-sdk/client-s3');
 const { s3Client } = require('../config/s3');
+const asyncHandler = require('express-async-handler');
 
 // @desc  Get all products (public)
 // @route GET /api/products
 // @access Public
-const getProducts = async (req, res) => {
-  const { category, search, page = 1, limit = 12, sort = '-createdAt' } = req.query;
+const getProducts = asyncHandler(async (req, res) => {
+  const { category, subCategory, search, page = 1, limit = 12, sort = '-createdAt' } = req.query;
   const query = { isActive: true };
 
   if (category) query.category = category;
+  if (subCategory) query.subCategory = subCategory;
   if (search) query.$text = { $search: search };
 
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -28,24 +30,24 @@ const getProducts = async (req, res) => {
       limit: parseInt(limit),
     },
   });
-};
+});
 
 // @desc  Get single product (public)
 // @route GET /api/products/:id
 // @access Public
-const getProduct = async (req, res) => {
+const getProduct = asyncHandler(async (req, res) => {
   const product = await Product.findOne({ _id: req.params.id, isActive: true });
   if (!product) {
     return res.status(404).json({ success: false, message: 'Product not found' });
   }
   res.json({ success: true, product });
-};
+});
 
 // @desc  Create product
 // @route POST /api/admin/products
 // @access Private (Admin)
-const createProduct = async (req, res) => {
-  const { title, description, price, category, sizes, colors, stock, tags } = req.body;
+const createProduct = asyncHandler(async (req, res) => {
+  const { title, description, price, category, subCategory, sizes, colors, stock, tags } = req.body;
 
   const images = req.files
     ? req.files.map((file) => ({
@@ -59,6 +61,7 @@ const createProduct = async (req, res) => {
     description,
     price: parseFloat(price),
     category,
+    subCategory: subCategory || '',
     sizes: sizes ? JSON.parse(sizes) : [],
     colors: colors ? JSON.parse(colors) : [],
     stock: parseInt(stock) || 0,
@@ -67,18 +70,18 @@ const createProduct = async (req, res) => {
   });
 
   res.status(201).json({ success: true, product });
-};
+});
 
 // @desc  Update product
 // @route PUT /api/admin/products/:id
 // @access Private (Admin)
-const updateProduct = async (req, res) => {
+const updateProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (!product) {
     return res.status(404).json({ success: false, message: 'Product not found' });
   }
 
-  const { title, description, price, category, sizes, colors, stock, tags, isActive } = req.body;
+  const { title, description, price, category, subCategory, sizes, colors, stock, tags, isActive } = req.body;
 
   // Handle new images
   let images = product.images;
@@ -97,6 +100,7 @@ const updateProduct = async (req, res) => {
       description: description || product.description,
       price: price ? parseFloat(price) : product.price,
       category: category || product.category,
+      subCategory: subCategory !== undefined ? subCategory : product.subCategory,
       sizes: sizes ? JSON.parse(sizes) : product.sizes,
       colors: colors ? JSON.parse(colors) : product.colors,
       stock: stock !== undefined ? parseInt(stock) : product.stock,
@@ -108,12 +112,12 @@ const updateProduct = async (req, res) => {
   );
 
   res.json({ success: true, product: updatedProduct });
-};
+});
 
 // @desc  Delete product
 // @route DELETE /api/admin/products/:id
 // @access Private (Admin)
-const deleteProduct = async (req, res) => {
+const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (!product) {
     return res.status(404).json({ success: false, message: 'Product not found' });
@@ -144,12 +148,12 @@ const deleteProduct = async (req, res) => {
 
   await product.deleteOne();
   res.json({ success: true, message: 'Product deleted successfully' });
-};
+});
 
 // @desc  Delete product image
 // @route DELETE /api/admin/products/:id/images/:imageIndex
 // @access Private (Admin)
-const deleteProductImage = async (req, res) => {
+const deleteProductImage = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
   if (!product) {
     return res.status(404).json({ success: false, message: 'Product not found' });
@@ -179,15 +183,16 @@ const deleteProductImage = async (req, res) => {
   await product.save();
 
   res.json({ success: true, product });
-};
+});
 
 // @desc  Get all products for admin (including inactive)
 // @route GET /api/admin/products
 // @access Private (Admin)
-const adminGetProducts = async (req, res) => {
-  const { page = 1, limit = 20, category, search } = req.query;
+const adminGetProducts = asyncHandler(async (req, res) => {
+  const { page = 1, limit = 20, category, subCategory, search } = req.query;
   const query = {};
   if (category) query.category = category;
+  if (subCategory) query.subCategory = subCategory;
   if (search) query.$text = { $search: search };
 
   const skip = (parseInt(page) - 1) * parseInt(limit);
@@ -201,6 +206,42 @@ const adminGetProducts = async (req, res) => {
     products,
     pagination: { total, page: parseInt(page), pages: Math.ceil(total / parseInt(limit)) },
   });
+});
+
+// @desc  Create product review
+// @route POST /api/products/:id/reviews
+// @access Private
+const createProductReview = async (req, res) => {
+  const { rating, comment } = req.body;
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    return res.status(404).json({ success: false, message: 'Product not found' });
+  }
+
+  const alreadyReviewed = product.reviews.find(
+    (r) => r.user.toString() === req.user._id.toString()
+  );
+
+  if (alreadyReviewed) {
+    return res.status(400).json({ success: false, message: 'Product already reviewed' });
+  }
+
+  const review = {
+    name: req.user.name,
+    rating: Number(rating),
+    comment,
+    user: req.user._id,
+  };
+
+  product.reviews.push(review);
+  product.numReviews = product.reviews.length;
+  product.averageRating =
+    product.reviews.reduce((acc, item) => item.rating + acc, 0) /
+    product.reviews.length;
+
+  await product.save();
+  res.status(201).json({ success: true, message: 'Review added' });
 };
 
 module.exports = {
@@ -211,4 +252,5 @@ module.exports = {
   deleteProduct,
   deleteProductImage,
   adminGetProducts,
+  createProductReview,
 };

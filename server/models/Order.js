@@ -20,7 +20,7 @@ const orderSchema = new mongoose.Schema(
         city: { type: String, required: true },
         state: { type: String, required: true },
         postalCode: { type: String, required: true },
-        country: { type: String, default: 'Pakistan' },
+        country: { type: String, default: '' },
       },
     },
     items: [
@@ -68,6 +68,16 @@ const orderSchema = new mongoose.Schema(
       type: String,
       enum: ['customer', 'shopkeeper', null],
       default: null,
+    },
+    verificationChecklist: {
+      isQualityVerified: { type: Boolean, default: false },
+      isSizeVerified: { type: Boolean, default: false },
+      isIntegrityVerified: { type: Boolean, default: false },
+      verifiedAt: Date
+    },
+    isVerified: {
+      type: Boolean,
+      default: false
     },
   },
   { timestamps: true }

@@ -15,9 +15,13 @@ const customerSchema = new mongoose.Schema(
       lowercase: true,
       trim: true,
     },
+    firebaseUid: {
+      type: String,
+      unique: true,
+      sparse: true,
+    },
     password: {
       type: String,
-      required: [true, 'Password is required'],
       minlength: 6,
       select: false,
     },
@@ -34,7 +38,7 @@ const customerSchema = new mongoose.Schema(
 );
 
 customerSchema.pre('save', async function () {
-  if (!this.isModified('password')) return;
+  if (!this.isModified('password') || !this.password) return;
   this.password = await bcrypt.hash(this.password, 12);
 });
 

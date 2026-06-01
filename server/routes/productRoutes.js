@@ -8,6 +8,7 @@ const {
   deleteProduct,
   deleteProductImage,
   adminGetProducts,
+  createProductReview,
 } = require('../controllers/productController');
 const { protect } = require('../middleware/customerAuth');
 const { protectAdmin } = require('../middleware/adminAuth');
@@ -16,6 +17,9 @@ const { upload } = require('../config/s3');
 // Public routes
 router.get('/', getProducts);
 router.get('/:id', getProduct);
+
+// Customer protected routes
+router.post('/:id/reviews', protect, createProductReview);
 
 // Admin routes (mounted under /api/admin/products)
 router.post('/admin', protectAdmin, upload.array('images', 5), createProduct);

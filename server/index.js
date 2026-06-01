@@ -14,11 +14,28 @@ const orderRoutes = require('./routes/orderRoutes');
 // Connect DB
 connectDB();
 
+// Initialize Firebase
+const { initializeFirebase } = require('./config/firebase');
+initializeFirebase();
+
 const app = express();
 
 // Security & middleware
-app.use(helmet({ crossOriginResourcePolicy: false }));
-app.use(cors({ origin: process.env.CLIENT_URL || 'http://localhost:5173', credentials: true }));
+app.use(helmet({ 
+  crossOriginResourcePolicy: false,
+  crossOriginOpenerPolicy: false 
+}));
+
+// Diagnostic Logging
+app.use((req, res, next) => {
+  console.log(`[${new Date().toISOString()}] ${req.method} ${req.url} - Origin: ${req.headers.origin}`);
+  next();
+});
+
+app.use(cors({ 
+  origin: true, // Reflect request origin (Permissive for dev sync)
+  credentials: true 
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 // Serve static local uploads (fallback for AWS)
@@ -46,6 +63,7 @@ app.get('/api/shop-info', async (req, res) => {
         phone: settings.phone,
         email: settings.email,
         instagram: settings.instagram,
+        galleryImages: settings.galleryImages || [],
         hours: 'Mon-Sat: 10am - 9pm, Sun: 12pm - 7pm',
       },
     });
@@ -84,9 +102,13 @@ app.delete('/api/admin/orders/:id', protectAdmin, deleteOrder);
 app.get('/api/admin/analytics', protectAdmin, getAnalytics);
 
 // Shop Settings
-const { getShopSettings, updateShopSettings } = require('./controllers/settingsController');
+const { getShopSettings, updateShopSettings, addGalleryImage, removeGalleryImage } = require('./controllers/settingsController');
 app.get('/api/admin/settings', protectAdmin, getShopSettings);
 app.put('/api/admin/settings', protectAdmin, updateShopSettings);
+
+// Gallery image management
+app.post('/api/admin/gallery', protectAdmin, upload.single('image'), addGalleryImage);
+app.delete('/api/admin/gallery/:id', protectAdmin, removeGalleryImage);
 
 // 404 handler
 app.use((req, res) => {

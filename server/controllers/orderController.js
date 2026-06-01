@@ -1,6 +1,10 @@
 const Order = require('../models/Order');
 const Product = require('../models/Product');
-const { sendNewOrderNotification, sendOrderCancelledNotification } = require('../services/whatsappService');
+const { 
+  sendNewOrderNotification, 
+  sendOrderCancelledNotification,
+  sendTrackingLinkNotification 
+} = require('../services/whatsappService');
 
 // @desc  Place a new order (customer)
 // @route POST /api/orders
@@ -12,7 +16,7 @@ const placeOrder = async (req, res) => {
     return res.status(400).json({ success: false, message: 'No items in order' });
   }
 
-  // Validate products and calculate total
+  // Validate products, calculate total, and check stock
   let totalAmount = 0;
   const enrichedItems = [];
 
@@ -20,6 +24,10 @@ const placeOrder = async (req, res) => {
     const product = await Product.findById(item.productId);
     if (!product || !product.isActive) {
       return res.status(400).json({ success: false, message: `Product not found: ${item.productId}` });
+    }
+
+    if (product.stock < item.quantity) {
+      return res.status(400).json({ success: false, message: `Insufficient stock for ${product.title}` });
     }
 
     const itemTotal = product.price * item.quantity;
@@ -33,6 +41,10 @@ const placeOrder = async (req, res) => {
       color: item.color,
       image: product.images[0]?.url || '',
     });
+
+    // Automate Inventory Depletion
+    product.stock -= item.quantity;
+    await product.save();
   }
 
   const order = await Order.create({
@@ -268,6 +280,69 @@ const getAnalytics = async (req, res) => {
   });
 };
 
+// @desc  Verify order delivery checklist
+// @route PATCH /api/orders/:id/verify
+// @access Private (Customer)
+const verifyOrderDelivery = async (req, res) => {
+  const { isQualityVerified, isSizeVerified, isIntegrityVerified, deliveryStatus } = req.body;
+  const order = await Order.findOne({ _id: req.params.id, customer: req.customer._id });
+
+  if (!order) {
+    return res.status(404).json({ success: false, message: 'Order not found' });
+  }
+
+  // Allow verification if it's already shipped or delivered
+  if (!['shipped', 'delivered'].includes(order.status)) {
+    return res.status(400).json({ success: false, message: 'Order must be in transit before verification' });
+  }
+
+  order.customerDeliveryStatus = deliveryStatus || 'delivered';
+  order.verificationChecklist = {
+    isQualityVerified: !!isQualityVerified,
+    isSizeVerified: !!isSizeVerified,
+    isIntegrityVerified: !!isIntegrityVerified,
+    verifiedAt: Date.now()
+  };
+  order.isVerified = true;
+  
+  // If customer marks as delivered, we can sync the main status too
+  if (deliveryStatus === 'delivered' && order.status !== 'delivered') {
+    order.status = 'delivered';
+    order.statusHistory.push({ status: 'delivered', note: 'Verified by customer' });
+  }
+
+  await order.save();
+
+  res.json({ success: true, message: 'Status updated successfully', order });
+};
+
+const sendTrackingLink = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ success: false, message: 'Order not found' });
+    }
+
+    // Construct tracking URL (ensure http for local dev)
+    const baseUrl = process.env.NODE_ENV === 'production' 
+      ? req.get('origin') 
+      : 'http://localhost:5173';
+      
+    const trackingUrl = `${baseUrl}/orders?orderId=${order.orderId}`;
+
+    const result = await sendTrackingLinkNotification(order, trackingUrl);
+
+    if (result.success) {
+      res.json({ success: true, message: 'Tracking link dispatched to customer' });
+    } else {
+      res.status(500).json({ success: false, message: 'Failed to send WhatsApp notification' });
+    }
+  } catch (error) {
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   placeOrder,
   getMyOrders,
@@ -277,4 +352,6 @@ module.exports = {
   updateOrderStatus,
   deleteOrder,
   getAnalytics,
+  verifyOrderDelivery,
+  sendTrackingLink
 };

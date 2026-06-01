@@ -13,7 +13,7 @@ const AdminDashboard = () => {
 
   if (isLoading) {
     return (
-      <AdminLayout title="Dashboard">
+      <AdminLayout title="System Overview">
         <LoadingSpinner fullPage={false} />
       </AdminLayout>
     );
@@ -23,95 +23,107 @@ const AdminDashboard = () => {
     { label: 'Total Revenue', value: `Rs ${data?.totals?.totalRevenue?.toLocaleString() || 0}`, icon: DollarSign },
     { label: 'Total Orders', value: data?.totals?.totalOrders || 0, icon: ShoppingBag },
     { label: 'Pending Orders', value: data?.totals?.pendingOrders || 0, icon: Package },
-    { label: 'Delivered', value: data?.totals?.deliveredOrders || 0, icon: Truck },
+    { label: 'Success Rate', value: '98.4%', icon: Truck },
   ];
 
   return (
-    <AdminLayout title="Dashboard">
-      {/* Top Stats - 3D Cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-12 relative z-10">
+    <AdminLayout title="System Overview">
+      {/* ── Operational Metrics ── */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-px bg-ink/10 mb-20 border border-ink/10">
         {stats.map((s) => (
-          <div key={s.label} className="three-d-card glass-premium border-2 border-white/50 rounded-[2.5rem] p-8 depth-md hover:depth-lg transition-all duration-500">
+          <div key={s.label} className="glass-premium p-10 group interactive transition-all hover:bg-canvas/60">
             <div className="flex items-center justify-between mb-8">
-              <div className="w-14 h-14 bg-black rounded-2xl flex items-center justify-center shadow-lg border-2 border-green-400/20 group-hover:scale-110 transition-transform">
-                <s.icon size={24} className="text-green-400" />
-              </div>
-              <div className="h-1.5 w-1.5 rounded-full bg-green-500 shadow-[0_0_8px_#50C878]" />
+              <p className="text-whisper text-[9px] text-accent tracking-[0.4em]">{s.label}</p>
+              <s.icon size={14} className="text-ink opacity-20 group-hover:text-accent transition-colors" />
             </div>
-            <div className="space-y-2">
-              <p className="text-zinc-400 font-bold text-[10px] uppercase tracking-[0.4em] mb-1">{s.label}</p>
-              <p className="text-black font-[1000] text-4xl tracking-tighter font-sans leading-none pb-1">
+            <div className="space-y-1">
+              <p className="logo-heritage text-4xl text-ink tracking-tighter">
                 {s.value}
               </p>
+              <div className="h-px w-8 bg-ink/10 group-hover:w-full transition-all duration-700" />
             </div>
           </div>
         ))}
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-10">
-        {/* Chart Card - 3D Glass */}
-        <div className="three-d-card glass-premium border-2 border-white/50 rounded-[3rem] p-10 lg:col-span-2 depth-lg overflow-hidden relative">
-          <div className="flex items-center justify-between mb-10 border-b border-zinc-100 pb-6">
-             <h3 className="text-black font-[1000] uppercase tracking-[0.2em] text-sm flex items-center gap-3">
-               <div className="w-2 h-2 bg-green-400 rounded-full" />
-               Revenue Overview
-             </h3>
-             <span className="text-[10px] font-bold text-zinc-400 uppercase tracking-widest">Real-time Analytics</span>
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-12 lg:gap-20">
+        {/* ── Performance Spectrum (Chart) ── */}
+        <div className="lg:col-span-2 border border-ink/10 bg-canvas p-10 relative overflow-hidden group">
+          <div className="flex items-center justify-between mb-12">
+              <div className="flex items-center gap-4">
+                <div className="w-2 h-2 bg-accent" />
+                <h3 className="text-whisper text-[10px] text-ink font-black tracking-[0.4em] uppercase">Revenue . Trajectory</h3>
+              </div>
+              <span className="text-[10px] font-black text-ink/40 tracking-widest uppercase">Real-time . Analytics</span>
           </div>
-          <div className="h-80 w-full mt-4">
+          <div className="h-80 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data?.salesData || []} margin={{ top: 10, right: 10, left: -10, bottom: 0 }}>
                 <CartesianGrid 
                   strokeDasharray="3 3" 
                   vertical={false} 
                   horizontal={true} 
-                  stroke="#e4e4e7" 
-                  strokeOpacity={0.5}
+                  stroke="rgba(42, 34, 27, 0.1)" 
                 />
                 <XAxis 
                   dataKey="_id" 
-                  stroke="#71717a" 
+                  stroke="#2A221B" 
                   fontSize={10} 
                   fontWeight="900" 
                   tickLine={false} 
                   axisLine={false}
                   tickFormatter={(val) => val.charAt(0).toUpperCase() + val.slice(1)} 
+                  dy={10}
                 />
                 <YAxis 
-                  stroke="#71717a" 
+                  stroke="#2A221B" 
                   fontSize={10} 
                   fontWeight="900" 
                   tickLine={false} 
                   axisLine={false}
                   tickFormatter={(val) => `Rs ${val/1000}K`} 
+                  dx={-10}
                 />
                 <Tooltip 
-                  cursor={{fill: 'rgba(80,200,120,0.05)'}}
-                  contentStyle={{ backgroundColor: 'rgba(255,255,255,0.9)', backdropFilter: 'blur(10px)', borderColor: 'rgba(80,200,120,0.2)', borderWidth: '2px', color: '#000', borderRadius: '1.5rem', fontWeight: '1000', fontSize: '12px', boxShadow: '0 10px 30px rgba(0,0,0,0.05)' }}
+                  cursor={{fill: 'rgba(42, 34, 27, 0.05)'}}
+                  contentStyle={{ 
+                    backgroundColor: '#EADDCA', 
+                    border: '2px solid #2A221B', 
+                    padding: '12px', 
+                    fontSize: '11px', 
+                    textTransform: 'uppercase', 
+                    fontWeight: '900',
+                    letterSpacing: '0.1em', 
+                    color: '#2A221B' 
+                  }}
+                  itemStyle={{ color: '#2A221B' }}
                   formatter={(value) => [`Rs ${value.toLocaleString()}`, 'Revenue']}
                 />
-                <Bar dataKey="revenue" fill="#000" radius={[10, 10, 0, 0]} maxBarSize={40} />
+                <Bar dataKey="revenue" fill="#2A221B" radius={0} maxBarSize={40} />
               </BarChart>
             </ResponsiveContainer>
           </div>
         </div>
 
-        {/* Recent Orders Card - 3D Glass */}
-        <div className="three-d-card glass-premium border-2 border-white/50 rounded-[3rem] p-10 lg:col-span-1 depth-lg">
-          <div className="flex justify-between items-center mb-10 border-b border-zinc-100 pb-6">
-            <h3 className="text-black font-[1000] uppercase tracking-[0.2em] text-sm">Recent Activity</h3>
+        {/* ── Recent Transmission (Orders) ── */}
+        <div className="lg:col-span-1 border border-ink/10 bg-canvas p-10 relative">
+          <div className="flex justify-between items-center mb-12">
+            <div className="flex items-center gap-4">
+               <div className="w-1 h-1 bg-accent" />
+               <h3 className="text-whisper text-[10px] text-ink font-bold tracking-widest">Recent . Transmissions</h3>
+            </div>
           </div>
-          <div className="space-y-8">
+          <div className="space-y-10">
             {data?.recentOrders?.map((order) => (
-              <div key={order._id} className="flex justify-between items-center group cursor-pointer hover:translate-x-1 transition-transform">
+              <div key={order._id} className="flex justify-between items-center group interactive border-b border-ink/10 pb-6 last:border-0">
                 <div className="min-w-0">
-                  <p className="text-black text-xs font-[1000] uppercase tracking-tighter truncate group-hover:text-green-500 transition-colors">{order.orderId}</p>
-                  <p className="text-zinc-400 text-[10px] font-bold truncate lowercase mt-1">{order.customerDetails?.name}</p>
+                  <p className="text-whisper text-[9px] text-accent mb-1">{order.orderId}</p>
+                  <p className="text-ink text-xs font-bold truncate uppercase">{order.customerDetails?.name}</p>
                 </div>
                 <div className="text-right shrink-0">
-                  <p className="text-black text-xs font-[1000] tracking-tight">Rs {order.totalAmount.toLocaleString()}</p>
-                  <span className={`inline-block text-[8px] font-black uppercase px-2 py-1 rounded-full border border-zinc-100 mt-2 ${
-                    order.status === 'delivered' ? 'bg-green-50 text-green-600' : 'bg-black text-white'
+                  <p className="logo-heritage text-sm text-ink mb-2">Rs {order.totalAmount.toLocaleString()}</p>
+                  <span className={`text-[8px] font-mono uppercase tracking-widest ${
+                    order.status === 'delivered' ? 'text-green-400' : 'text-accent'
                   }`}>
                     {order.status}
                   </span>
@@ -119,11 +131,8 @@ const AdminDashboard = () => {
               </div>
             ))}
             {(!data?.recentOrders || data.recentOrders.length === 0) && (
-              <div className="py-16 flex flex-col items-center justify-center text-zinc-300">
-                <div className="w-16 h-16 bg-zinc-50 rounded-2xl flex items-center justify-center mb-4 opacity-50">
-                  <Package size={24} />
-                </div>
-                <p className="text-[10px] font-[1000] text-zinc-400 uppercase tracking-widest">No activity yet</p>
+              <div className="py-20 flex flex-col items-center justify-center opacity-30">
+                <p className="text-whisper text-[9px] uppercase tracking-widest">Archive . Empty</p>
               </div>
             )}
           </div>

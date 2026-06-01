@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import { api } from '../lib/axios';
 import { useCart } from '../context/CartContext';
 import { useAuth } from '../context/AuthContext';
@@ -17,31 +17,39 @@ const ProductDetailPage = () => {
   const [quantity, setQuantity] = useState(1);
   const [activeImage, setActiveImage] = useState(0);
 
+  const queryClient = useQueryClient();
+
   const { data, isLoading, error } = useQuery({
     queryKey: ['product', id],
     queryFn: () => api.get(`/products/${id}`).then((r) => r.data),
+    initialData: () => {
+      const featured = queryClient.getQueryData(['featured-products']);
+      const featuredProd = featured?.products?.find((p) => p._id === id);
+      if (featuredProd) return { product: featuredProd };
+
+      const queries = queryClient.getQueriesData({ queryKey: ['products'] });
+      for (const [_, qData] of queries) {
+        const p = qData?.products?.find((p) => p._id === id) || qData?.find?.((p) => p._id === id);
+        if (p) return { product: p };
+      }
+      return undefined;
+    },
+    staleTime: 30000,
   });
 
   if (isLoading) {
     return (
-      <div className="pt-24 max-w-6xl mx-auto px-4 py-16">
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 animate-pulse">
-          <div className="aspect-square bg-zinc-800 rounded-2xl" />
-          <div className="space-y-4">
-            <div className="h-8 bg-zinc-800 rounded-xl w-3/4" />
-            <div className="h-12 bg-zinc-800 rounded-xl w-1/3" />
-            <div className="h-32 bg-zinc-800 rounded-xl" />
-          </div>
-        </div>
+      <div className="min-h-screen bg-canvas flex items-center justify-center">
+        <div className="w-12 h-12 border-4 border-accent border-t-transparent rounded-full animate-spin" />
       </div>
     );
   }
 
   if (error || !data?.product) {
     return (
-      <div className="pt-24 text-center py-20">
-        <Package size={48} className="text-zinc-600 mx-auto mb-4" />
-        <p className="text-zinc-400">Product not found</p>
+      <div className="min-h-screen bg-canvas section-quiet text-center">
+        <p className="text-whisper">Product not identified</p>
+        <button onClick={() => navigate('/shop')} className="text-whisper text-accent mt-8 border-b border-accent pb-1">Return to Archive</button>
       </div>
     );
   }
@@ -69,129 +77,140 @@ const ProductDetailPage = () => {
   };
 
   return (
-    <div className="pt-24 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-10 pb-20">
-      {/* Back button */}
-      <button onClick={() => navigate(-1)} className="flex items-center gap-2 text-zinc-400 hover:text-green-500 mb-8 text-sm transition-colors duration-300">
-        <ChevronLeft size={18} /> Back
-      </button>
+    <div className="bg-canvas geometric-grid min-h-screen section-quiet px-6 sm:px-12 lg:px-24">
+      <div className="bg-grain opacity-[0.03]" />
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16">
-        {/* Images */}
-        <div>
-          <div className="relative aspect-square bg-zinc-900 rounded-2xl overflow-hidden mb-4 group">
+      {/* Navigation & Context */}
+      <div className="flex justify-between items-center mb-16">
+        <button onClick={() => navigate(-1)} className="text-whisper flex items-center gap-4 group interactive">
+          <ChevronLeft size={12} className="group-hover:-translate-x-1 transition-transform" /> Back to Archive
+        </button>
+        <p className="text-whisper opacity-40">Detail . 0{product._id.slice(-2)}</p>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 lg:gap-24">
+        {/* Imagery System */}
+        <div className="lg:col-span-7 space-y-8">
+          <div className="relative aspect-[4/5] lg:aspect-auto lg:h-[75vh] max-h-[850px] overflow-hidden border border-border group bg-canvas/20 flex items-center justify-center">
             {images[activeImage]?.url ? (
-              <img src={images[activeImage].url} alt={product.title} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700" />
+              <img 
+                key={activeImage}
+                src={images[activeImage].url} 
+                alt={product.title} 
+                className="max-w-[95%] max-h-[95%] object-contain grayscale hover:grayscale-0 transition-all duration-500 ease-out transform-gpu" 
+              />
             ) : (
-              <div className="w-full h-full flex items-center justify-center">
-                <Package size={64} className="text-zinc-700" />
+              <div className="w-full h-full bg-border/5 flex items-center justify-center">
+                <Package size={24} className="text-mute" />
               </div>
             )}
+            
             {images.length > 1 && (
-              <>
+              <div className="absolute bottom-8 right-8 flex gap-4 z-10">
                 <button onClick={() => setActiveImage((p) => (p - 1 + images.length) % images.length)}
-                  className="absolute left-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/60 hover:bg-green-400 hover:text-black rounded-full flex items-center justify-center text-white transition-all duration-300">
-                  <ChevronLeft size={18} />
+                  className="w-10 h-10 border border-ink/10 bg-canvas/40 backdrop-blur-sm flex items-center justify-center text-ink hover:bg-accent hover:text-canvas transition-all interactive">
+                  <ChevronLeft size={14} />
                 </button>
                 <button onClick={() => setActiveImage((p) => (p + 1) % images.length)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 w-9 h-9 bg-black/60 hover:bg-green-400 hover:text-black rounded-full flex items-center justify-center text-white transition-all duration-300">
-                  <ChevronRight size={18} />
+                  className="w-10 h-10 border border-ink/10 bg-canvas/40 backdrop-blur-sm flex items-center justify-center text-ink hover:bg-accent hover:text-canvas transition-all interactive">
+                  <ChevronRight size={14} />
                 </button>
-              </>
+              </div>
             )}
           </div>
+
           {images.length > 1 && (
-            <div className="flex gap-2 overflow-x-auto">
+            <div className="flex gap-6 overflow-x-auto hide-scrollbar reveal-hidden">
               {images.map((img, i) => (
                 <button key={i} onClick={() => setActiveImage(i)}
-                  className={`shrink-0 w-18 h-18 rounded-xl overflow-hidden border-2 transition-all ${i === activeImage ? 'border-green-400 shadow-lg shadow-green-400/20' : 'border-zinc-700 hover:border-green-400/50'}`}>
-                  <img src={img.url} alt="" className="w-16 h-16 object-cover" />
+                  className={`shrink-0 w-24 h-32 overflow-hidden border transition-all duration-500 ${i === activeImage ? 'border-accent' : 'border-border grayscale opacity-40 hover:opacity-100 hover:grayscale-0'} interactive`}>
+                  <img src={img.url} alt="" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
           )}
         </div>
 
-        {/* Product Info */}
-        <div className="flex flex-col gap-5">
-          <div>
-            <span className="badge bg-green-400/15 text-green-400 mb-3 capitalize">{product.category}</span>
-            <h1 className="font-playfair text-3xl font-bold text-white mb-2">{product.title}</h1>
-            <p className="text-4xl font-bold text-green-400">Rs. {product.price.toLocaleString()}</p>
+        {/* Technical Data & Actions */}
+        <div className="lg:col-span-5 flex flex-col gap-12 reveal-hidden">
+          <div className="space-y-6">
+            <div className="flex gap-4">
+              <span className="text-whisper text-accent">{product.category}</span>
+              {product.subCategory && <span className="text-whisper opacity-30">{product.subCategory}</span>}
+            </div>
+            <h1 className="logo-heritage text-5xl md:text-7xl text-ink leading-tight">{product.title}</h1>
+            <p className="text-whisper text-3xl text-accent">
+              <span className="opacity-40 italic lowercase mr-2">rs.</span>
+              {product.price.toLocaleString()}
+            </p>
           </div>
 
-          <p className="text-zinc-400 leading-relaxed">{product.description}</p>
+          <p className="font-body text-ink/60 leading-loose italic text-sm">{product.description}</p>
 
-          {/* Sizes */}
-          {product.sizes?.length > 0 && (
-            <div>
-              <p className="text-zinc-400 text-sm mb-2 font-medium">Size <span className="text-zinc-600">(Required)</span></p>
-              <div className="flex gap-2 flex-wrap">
-                {product.sizes.map((s) => (
-                  <button key={s} id={`size-${s}`} onClick={() => setSelectedSize(s)}
-                    className={`px-4 py-2 rounded-xl text-sm font-semibold border transition-all ${
-                      selectedSize === s
-                        ? 'bg-green-400 border-green-400 text-black shadow-lg shadow-green-400/20'
-                        : 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:border-green-400 hover:text-green-400'
-                    }`}>
-                    {s}
-                  </button>
-                ))}
+          <div className="h-px bg-border/40 w-full" />
+
+          {/* Configuration */}
+          <div className="space-y-10">
+            {product.sizes?.length > 0 && (
+              <div>
+                <p className="text-whisper mb-6">Select Proportion</p>
+                <div className="flex gap-4 flex-wrap">
+                  {product.sizes.map((s) => (
+                    <button key={s} onClick={() => setSelectedSize(s)}
+                      className={`text-whisper px-6 py-3 border transition-all duration-500 ${
+                        selectedSize === s
+                          ? 'border-accent text-accent bg-accent/5'
+                          : 'border-border text-mute hover:border-ink hover:text-ink'
+                      } interactive`}>
+                      {s}
+                    </button>
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Colors */}
-          {product.colors?.length > 0 && (
-            <div>
-              <p className="text-zinc-400 text-sm mb-2 font-medium">
-                Color: <span className="text-white">{selectedColor || 'None selected'}</span>
-              </p>
-              <div className="flex gap-2 flex-wrap">
-                {product.colors.map((c) => (
-                  <button key={c.name} onClick={() => setSelectedColor(c.name)}
-                    title={c.name}
-                    className={`w-8 h-8 rounded-full border-2 transition-all ${
-                      selectedColor === c.name ? 'border-green-400 scale-110 shadow-lg shadow-green-400/30' : 'border-zinc-600 hover:border-green-400/50'
-                    }`}
-                    style={{ backgroundColor: c.hex || '#888' }}
-                  />
-                ))}
+            {product.colors?.length > 0 && (
+              <div>
+                <p className="text-whisper mb-6">Color Essence: <span className="text-ink">{selectedColor || '—'}</span></p>
+                <div className="flex gap-4 flex-wrap">
+                  {product.colors.map((c) => (
+                    <button key={c.name} onClick={() => setSelectedColor(c.name)}
+                      className={`w-10 h-10 border transition-all ${
+                        selectedColor === c.name ? 'border-accent scale-110' : 'border-border'
+                      } interactive`}
+                      style={{ backgroundColor: c.hex || '#888' }}
+                    />
+                  ))}
+                </div>
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Quantity */}
-          <div className="flex items-center gap-4">
-            <p className="text-zinc-400 text-sm font-medium">Quantity</p>
-            <div className="flex items-center gap-3 bg-zinc-800 rounded-xl p-1">
-              <button onClick={() => setQuantity(Math.max(1, quantity - 1))}
-                className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-green-400 rounded-lg hover:bg-zinc-700 transition-colors">
-                <Minus size={16} />
-              </button>
-              <span className="text-white font-semibold w-6 text-center">{quantity}</span>
-              <button onClick={() => setQuantity(quantity + 1)}
-                className="w-8 h-8 flex items-center justify-center text-zinc-400 hover:text-green-400 rounded-lg hover:bg-zinc-700 transition-colors">
-                <Plus size={16} />
-              </button>
+            <div className="flex items-center gap-12">
+              <p className="text-whisper">Quantity</p>
+              <div className="flex items-center gap-8 border border-border px-4 py-2">
+                <button onClick={() => setQuantity(Math.max(1, quantity - 1))} className="text-mute hover:text-accent interactive"><Minus size={12} /></button>
+                <span className="text-whisper w-4 text-center">{quantity}</span>
+                <button onClick={() => setQuantity(quantity + 1)} className="text-mute hover:text-accent interactive"><Plus size={12} /></button>
+              </div>
             </div>
           </div>
 
-          {/* Stock */}
-          <p className={`text-sm ${product.stock > 0 ? 'text-green-400' : 'text-red-400'}`}>
-            {product.stock > 0 ? `✓ ${product.stock} in stock` : '✗ Out of stock'}
+          {/* Primary Actions */}
+          <div className="flex flex-col gap-6 pt-8">
+            <button id="buy-now-btn" onClick={handleBuyNow} disabled={product.stock === 0}
+              className="btn-primary w-full disabled:opacity-30">
+              Buy It Now
+            </button>
+            <button id="add-to-cart-btn" onClick={handleAddToCart} disabled={product.stock === 0}
+              className="btn-secondary w-full disabled:opacity-30">
+              Add to Cart
+            </button>
+          </div>
+
+          <p className={`text-whisper ${product.stock > 0 ? 'text-accent' : 'text-red-900/50'}`}>
+            {product.stock > 0 ? `Inventory: 0${product.stock} Units` : 'Inventory: Depleted'}
           </p>
 
-          {/* CTAs */}
-          <div className="flex gap-3">
-            <button id="add-to-cart-btn" onClick={handleAddToCart} disabled={product.stock === 0}
-              className="btn-secondary flex items-center gap-2 flex-1 justify-center disabled:opacity-50 hover:shadow-green-400/10">
-              <ShoppingBag size={18} /> Add to Cart
-            </button>
-            <button id="buy-now-btn" onClick={handleBuyNow} disabled={product.stock === 0}
-              className="btn-primary flex items-center gap-2 flex-1 justify-center disabled:opacity-50">
-              Buy Now
-            </button>
-          </div>
         </div>
       </div>
     </div>

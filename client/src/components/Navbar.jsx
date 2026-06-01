@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Menu, X, User, LogOut, Package } from 'lucide-react';
+import { Menu, X, User, LogOut, Package, ShoppingBag } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import { useCart } from '../context/CartContext';
 
@@ -18,107 +18,154 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="fixed top-6 left-1/2 -translate-x-1/2 z-50 w-[95%] lg:w-[90%] glass-premium rounded-[2.5rem] depth-lg border-2 border-white/50 animate-fade-in transition-all duration-500 hover:top-5">
-      <div className="max-w-full mx-auto px-6 lg:px-12">
-        <div className="flex items-center justify-between h-24">
-          {/* Logo Section */}
-          <div className="flex-none md:flex-1 flex justify-start">
-            <Link to="/" className="flex items-center gap-2 group" onClick={() => setMenuOpen(false)}>
-              <span className="logo-heritage text-3xl md:text-5xl font-normal uppercase tracking-[0.2em] hover:scale-105 transition-transform duration-300">
+      <nav className={`fixed top-0 left-0 right-0 z-[100] transition-all duration-500 selection:bg-accent selection:text-canvas ${
+        menuOpen ? 'bg-canvas' : 'bg-white/10 backdrop-blur-2xl border-b border-white/30 shadow-[0_8px_32px_rgba(42,34,27,0.05)]'
+      }`}>
+      <div className="max-w-full mx-auto px-6 sm:px-12 lg:px-24">
+        <div className="flex items-center justify-between h-20">
+          {/* Logo Section - Understated */}
+          <div className="flex-1 flex justify-start">
+            <Link to="/" className="group interactive" onClick={() => setMenuOpen(false)}>
+              <span className="logo-heritage text-2xl md:text-3xl text-ink font-normal uppercase tracking-[0.3em] transition-all duration-500 hover:text-accent">
                 HABIBI
               </span>
             </Link>
           </div>
 
-          {/* Desktop Nav - Centered */}
-          <div className="hidden md:flex flex-1 justify-center items-center gap-10">
-            <Link to="/" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase">
-              HOME
+          {/* Desktop Nav - Precise Whisper */}
+          <div className="hidden md:flex flex-none justify-center items-center gap-20">
+            <Link to="/" className="text-whisper text-[10px] hover:text-accent transition-all interactive">
+              Discovery
             </Link>
-            <Link to="/shop" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase">
-              SHOP
+            <Link to="/shop" className="text-whisper text-[10px] hover:text-accent transition-all interactive">
+              Archive
             </Link>
-            <Link to="/location" className="text-sm font-[1000] tracking-[0.4em] hover:scale-110 hover:text-amber-500 transition-all duration-300 uppercase">
-              FIND US
+            <Link to="/location" className="text-whisper text-[10px] hover:text-accent transition-all interactive">
+              Contact
             </Link>
           </div>
 
           {/* Actions - Right */}
-          <div className="flex-1 flex items-center justify-end gap-3">
-            {/* Cart */}
-            <Link to="/cart" className="relative group hover:scale-110 transition-transform duration-300">
-              <img src="/images/brush-cart.png" alt="Cart" className="h-12 w-auto mix-blend-multiply group-hover:drop-shadow-[0_0_8px_rgba(212,175,55,0.5)] transition-all duration-300" />
+          <div className="flex-1 flex items-center justify-end gap-12">
+            {/* Auth Signature */}
+            <div className="hidden md:block">
+              {customer ? (
+                <div className="relative">
+                  <button
+                    onClick={() => setDropdownOpen(!dropdownOpen)}
+                    className="text-whisper text-[10px] flex items-center gap-3 text-ink hover:text-accent transition-all interactive"
+                  >
+                    <User size={12} />
+                    <span>{customer.name.split(' ')[0]}</span>
+                  </button>
+                  {dropdownOpen && (
+                    <div className="absolute right-0 top-12 bg-canvas border border-border w-64 py-8 shadow-deep animate-fade-in-up glass-premium">
+                        {/* Identity Hub */}
+                        <div className="px-8 pb-6 border-b border-ink/5 mb-4">
+                          <p className="text-whisper text-[10px] font-black tracking-[0.2em] text-ink uppercase mb-2">
+                            {customer.name}
+                          </p>
+                          <p className="text-whisper text-[9px] opacity-40 lowercase tracking-wider">
+                            {customer.email}
+                          </p>
+                        </div>
+
+                        <div className="px-4">
+                          <Link
+                            to="/orders"
+                            className="text-whisper text-[9px] flex items-center gap-4 px-4 py-3 text-ink/60 hover:text-accent hover:bg-ink/[0.02] transition-all interactive"
+                            onClick={() => setDropdownOpen(false)}
+                          >
+                            <Package size={12} /> Order Archive
+                          </Link>
+                          <button
+                            onClick={handleLogout}
+                            className="text-whisper text-[9px] flex items-center gap-4 w-full px-4 py-3 text-red-900/60 hover:text-red-900 hover:bg-red-900/[0.02] transition-all interactive"
+                          >
+                            <LogOut size={12} /> Disconnect
+                          </button>
+                        </div>
+                    </div>
+                  )}
+                </div>
+              ) : (
+                <Link to="/login" className="text-whisper text-[10px] text-accent border-b border-accent/20 hover:border-accent pb-1 transition-all interactive">
+                  Identification
+                </Link>
+              )}
+            </div>
+
+            {/* Cart Icon - Geometric */}
+            <Link to="/cart" className="relative group interactive">
+              <ShoppingBag size={18} className="text-ink group-hover:text-accent transition-all" />
               {totalItems > 0 && (
-                <span className="absolute -top-1 -right-1 bg-amber-400 text-black text-[10px] font-black w-5 h-5 rounded-full flex items-center justify-center shadow-lg border border-black transform group-hover:scale-110 transition-transform">
-                  {totalItems > 9 ? '9+' : totalItems}
+                <span className="absolute -top-2 -right-2 text-accent text-[8px] font-bold">
+                  {totalItems}
                 </span>
               )}
             </Link>
 
-            {/* Auth */}
-            {customer ? (
-              <div className="relative">
-                <button
-                  onClick={() => setDropdownOpen(!dropdownOpen)}
-                  className="flex items-center gap-2 bg-zinc-100 hover:bg-amber-50 border-2 border-black hover:border-amber-400 px-3 py-2 rounded-xl text-sm text-black transition-all duration-300"
-                >
-                  <User size={16} className="text-amber-500" />
-                  <span className="hidden sm:block">{customer.name.split(' ')[0]}</span>
-                </button>
-                {dropdownOpen && (
-                  <div className="absolute right-0 top-12 bg-white border border-black rounded-xl shadow-2xl w-48 py-2 animate-fade-in">
-                    <Link
-                      to="/orders"
-                      className="flex items-center gap-2 px-4 py-2 text-sm text-zinc-700 hover:text-amber-500 hover:bg-amber-50"
-                      onClick={() => setDropdownOpen(false)}
-                    >
-                      <Package size={14} /> My Orders
-                    </Link>
-                    <button
-                      onClick={handleLogout}
-                      className="flex items-center gap-2 w-full px-4 py-2 text-sm text-red-600 hover:text-red-700 hover:bg-zinc-100"
-                    >
-                      <LogOut size={14} /> Logout
-                    </button>
-                  </div>
-                )}
-              </div>
-            ) : (
-              <Link to="/login" className="btn-primary py-2 px-4 text-sm">
-                Sign In
-              </Link>
-            )}
-
             {/* Mobile menu toggle */}
             <button
-              className="md:hidden p-2 text-zinc-600 hover:text-amber-500 transition-colors"
+              className="md:hidden text-ink hover:text-accent transition-colors interactive"
               onClick={() => setMenuOpen(!menuOpen)}
             >
-              {menuOpen ? <X size={22} /> : <Menu size={22} />}
+              {menuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
       </div>
 
-      {/* Mobile Menu */}
-      {menuOpen && (
-        <div className="md:hidden bg-white border-t border-black animate-slide-up shadow-lg">
-          <div className="px-4 py-8 space-y-6 flex flex-col items-center">
-            <Link to="/" onClick={() => setMenuOpen(false)} className="text-3xl font-black hover:scale-110 hover:text-amber-500 transition-all uppercase">
-              HOME
+      {/* Mobile Menu - Liquid Overlay */}
+      <div 
+        className={`md:hidden fixed inset-x-0 top-20 bottom-0 bg-canvas z-[100] px-8 py-12 overflow-y-auto transition-all duration-700 ease-[cubic-bezier(0.22,1,0.36,1)] ${
+          menuOpen 
+            ? 'opacity-100 translate-y-0 visible' 
+            : 'opacity-0 -translate-y-8 invisible'
+        }`}
+      >
+        <div className="flex flex-col gap-8 min-h-full pb-8">
+          {/* Identity Hub - Mobile */}
+          {customer && (
+            <div className={`mb-4 transition-all duration-1000 ${menuOpen ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'}`}>
+              <p className="text-whisper text-[11px] font-black tracking-[0.3em] text-accent uppercase mb-2">{customer.name}</p>
+              <p className="text-whisper text-[10px] opacity-40 lowercase">{customer.email}</p>
+              <div className="h-px w-8 bg-accent/20 mt-8" />
+            </div>
+          )}
+
+          {[
+            { label: 'Home', path: '/', delay: '100ms' },
+            { label: 'Archive', path: '/shop', delay: '200ms' },
+            { label: 'Contact', path: '/location', delay: '300ms' }
+          ].map((item) => (
+            <Link 
+              key={item.label}
+              to={item.path} 
+              onClick={() => setMenuOpen(false)} 
+              className={`logo-heritage text-5xl text-ink hover:text-accent transition-all duration-700 ${
+                menuOpen ? 'opacity-100 translate-x-0' : 'opacity-0 -translate-x-4'
+              }`}
+              style={{ transitionDelay: item.delay }}
+            >
+              {item.label}
             </Link>
-            <Link to="/shop" onClick={() => setMenuOpen(false)} className="text-3xl font-black hover:scale-110 hover:text-amber-500 transition-all uppercase">
-              SHOP
-            </Link>
-            <Link to="/location" onClick={() => setMenuOpen(false)} className="text-3xl font-black hover:scale-110 hover:text-amber-500 transition-all uppercase">
-              FIND US
-            </Link>
-            {customer && (
-              <Link to="/orders" onClick={() => setMenuOpen(false)} className="text-black font-black font-rock-salt text-xl uppercase tracking-widest pt-4 hover:text-amber-500 transition-colors">My Orders</Link>
+          ))}
+          
+          <div className={`pt-12 transition-all duration-1000 delay-500 ${
+            menuOpen ? 'opacity-100' : 'opacity-0'
+          }`}>
+            {customer ? (
+              <div className="flex flex-col gap-8">
+                <Link to="/orders" onClick={() => setMenuOpen(false)} className="text-whisper text-accent font-black tracking-widest uppercase">View History</Link>
+                <button onClick={handleLogout} className="text-whisper text-red-900/60 text-left font-black tracking-widest uppercase">Disconnect</button>
+              </div>
+            ) : (
+              <Link to="/login" onClick={() => setMenuOpen(false)} className="text-whisper text-accent font-black tracking-widest uppercase">Identification</Link>
             )}
           </div>
         </div>
-      )}
+      </div>
     </nav>
   );
 };

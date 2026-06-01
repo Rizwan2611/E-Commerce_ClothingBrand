@@ -3,7 +3,7 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../../lib/axios';
 import AdminLayout from '../../components/AdminLayout';
 import toast from 'react-hot-toast';
-import { ChevronDown, ExternalLink, Package, MessageSquare, Truck, CheckCircle2, Clock, Ban, Trash2 } from 'lucide-react';
+import { ChevronDown, ExternalLink, Package, MessageSquare, Truck, CheckCircle2, Clock, Ban, Trash2, MapPin } from 'lucide-react';
 
 const statuses = ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'];
 const statusIcons = {
@@ -46,108 +46,115 @@ const AdminOrders = () => {
     onError: (err) => toast.error(err.response?.data?.message || 'Failed to delete order'),
   });
 
+  const sendTrackingMutation = useMutation({
+    mutationFn: (id) => adminApi.post(`/orders/admin/${id}/send-tracking-link`),
+    onSuccess: () => {
+      toast.success('Logistics Link Dispatched');
+    },
+    onError: (err) => toast.error(err.response?.data?.message || 'Failed to dispatch link'),
+  });
+
   return (
-    <AdminLayout title="Orders">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
+    <AdminLayout title="Transmission Log">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-16">
         <div>
-           <div className="flex items-center gap-3 mb-2">
-              <Truck className="text-black" size={24} />
-              <h2 className="text-2xl font-bold uppercase tracking-tight text-black">All Orders</h2>
+           <div className="flex items-center gap-4 mb-4">
+              <div className="w-2 h-2 bg-accent" />
+              <h2 className="text-whisper text-[10px] font-bold uppercase tracking-[0.4em] text-ink">Order . Transmissions</h2>
            </div>
-          <p className="text-zinc-400 font-semibold text-xs">{data?.pagination?.total || 0} total orders</p>
+          <p className="text-whisper text-[11px] opacity-40 font-mono">Archive . Records: {data?.pagination?.total || 0} Entries</p>
         </div>
         
         <div className="relative group">
           <select 
-            className="bg-white border-2 border-black rounded-2xl py-4 pl-6 pr-12 text-xs font-bold uppercase tracking-wide focus:outline-none appearance-none cursor-pointer shadow-xl shadow-black/5 hover:translate-y-[-2px] transition-all"
+            className="bg-transparent border border-ink/20 text-whisper text-[10px] font-bold uppercase tracking-widest py-4 pl-6 pr-12 focus:outline-none focus:border-accent transition-all cursor-pointer text-ink"
             value={statusFilter}
             onChange={(e) => { setStatusFilter(e.target.value); setPage(1); }}
           >
-            <option value="">All Statuses</option>
-            {statuses.map(s => <option key={s} value={s} className="uppercase">{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+            <option value="" className="bg-canvas">ALL PROTOCOLS</option>
+            {statuses.map(s => <option key={s} value={s} className="bg-canvas">{s.toUpperCase()}</option>)}
           </select>
-          <ChevronDown size={18} className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-black" />
+          <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-accent" />
         </div>
       </div>
 
       {isLoading ? (
-        <div className="h-96 bg-white border-2 border-zinc-100 rounded-[2.5rem] animate-pulse shadow-sm" />
+        <div className="h-96 bg-canvas border border-ink/10 animate-pulse" />
       ) : (
-        <div className="space-y-8">
+        <div className="space-y-12">
           {data?.orders?.map((order) => (
-            <div key={order._id} className="bg-white border-2 border-black rounded-[2.5rem] overflow-hidden shadow-xl shadow-black/5 group hover:shadow-black/10 transition-all">
-              {/* Order Header */}
-              <div className="flex flex-col sm:flex-row justify-between sm:items-center bg-zinc-50/50 p-8 border-b-2 border-black gap-6">
-                <div>
-                  <div className="flex items-center gap-4 mb-2">
-                    <span className="text-black font-bold text-lg tracking-tight">{order.orderId}</span>
-                    <span className="text-zinc-400 font-semibold text-xs">{new Date(order.createdAt).toLocaleDateString()}</span>
+            <div key={order._id} className="border border-ink/10 bg-canvas overflow-hidden group">
+              {/* Order Header Protocol */}
+              <div className="flex flex-col lg:flex-row justify-between lg:items-center p-10 border-b border-ink/10 gap-8 bg-ink/[0.01]">
+                <div className="space-y-3">
+                  <div className="flex items-center gap-4">
+                    <span className="text-accent font-bold text-[10px] tracking-[0.2em] font-mono">{order.orderId}</span>
+                    <div className="w-1 h-1 bg-ink/20" />
+                    <span className="text-ink opacity-30 text-[9px] uppercase tracking-widest">{new Date(order.createdAt).toLocaleDateString()}</span>
                   </div>
-                  <p className="text-black text-sm font-semibold flex items-center gap-2">
+                  <p className="text-ink text-xs font-bold uppercase tracking-widest">
                     {order.customerDetails.name} 
-                    <span className="w-1.5 h-1.5 bg-zinc-300 rounded-full" /> 
-                    <span className="text-zinc-400">{order.customerDetails.phone}</span>
+                    <span className="mx-3 opacity-20">/</span>
+                    <span className="text-[10px] opacity-40 font-mono">{order.customerDetails.phone}</span>
                   </p>
                 </div>
                 
-                <div className="flex items-center gap-8">
+                <div className="flex items-center gap-12">
                   <div className="text-right">
-                    <p className="text-black font-bold text-2xl tracking-tight mb-1">Rs {order.totalAmount.toLocaleString()}</p>
-                    <p className="text-zinc-400 text-xs font-semibold capitalize">{order.paymentMethod}</p>
+                    <p className="logo-heritage text-3xl text-ink">Rs {order.totalAmount.toLocaleString()}</p>
+                    <p className="text-whisper text-[8px] text-accent tracking-widest uppercase mt-2">{order.paymentMethod}</p>
                   </div>
                   
-                  {/* Status Dropdown */}
+                  {/* Status Protocol Selection */}
                   <div className="relative group/select">
                     <select
-                      className={`appearance-none bg-black text-white font-bold text-xs uppercase tracking-wide px-6 py-4 rounded-2xl cursor-pointer border-2 border-black focus:outline-none transition-all pr-12`}
+                      className="appearance-none bg-ink text-canvas font-bold text-[9px] uppercase tracking-widest px-8 py-4 border border-ink focus:outline-none transition-all pr-12 hover:bg-accent hover:border-accent interactive"
                       value={order.status}
                       disabled={order.status === 'cancelled' || updateStatusMutation.isPending}
                       onChange={(e) => {
-                        if(confirm(`Change order status to "${e.target.value}"?`)) {
+                        if(confirm(`Override Protocol to "${e.target.value}"?`)) {
                           updateStatusMutation.mutate({ id: order._id, status: e.target.value });
                         }
                       }}
                     >
-                      {statuses.map(s => <option key={s} value={s} className="bg-white text-black">{s.charAt(0).toUpperCase() + s.slice(1)}</option>)}
+                      {statuses.map(s => <option key={s} value={s} className="bg-canvas text-ink">{s.toUpperCase()}</option>)}
                     </select>
-                    <ChevronDown size={14} className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-white opacity-60 group-hover/select:translate-y-[-40%] transition-transform" />
+                    <ChevronDown size={12} className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-canvas opacity-60" />
                   </div>
 
-                  {/* Delete Button */}
                   <button
                     onClick={() => {
-                      if(confirm('Are you sure you want to permanently delete this order?')) {
+                      if(confirm('Purge this transmission from archive?')) {
                         deleteOrderMutation.mutate(order._id);
                       }
                     }}
                     disabled={deleteOrderMutation.isPending}
-                    className="w-12 h-12 bg-white border-2 border-red-300 text-red-400 hover:bg-red-500 hover:border-red-500 hover:text-white rounded-2xl flex items-center justify-center transition-all shadow-sm"
-                    title="Delete order"
+                    className="text-ink/20 hover:text-red-500 transition-colors"
                   >
-                    <Trash2 size={18} />
+                    <Trash2 size={16} />
                   </button>
                 </div>
               </div>
 
-              {/* Order Content */}
-              <div className="p-8 grid grid-cols-1 lg:grid-cols-2 gap-12">
-                {/* Order Items */}
+              {/* Transmission Details */}
+              <div className="p-10 grid grid-cols-1 lg:grid-cols-2 gap-20">
+                {/* Manifest */}
                 <div>
-                  <h4 className="text-black font-bold text-sm uppercase tracking-wide mb-6 flex items-center gap-2">
-                    <Package size={14} /> Order Items
+                  <h4 className="text-whisper text-[9px] text-accent font-bold uppercase tracking-[0.4em] mb-10 flex items-center gap-4">
+                    <Package size={12} /> Manifest . Elements
                   </h4>
-                  <div className="space-y-4">
+                  <div className="space-y-8">
                     {order.items.map((item, i) => (
-                      <div key={i} className="flex gap-5 group items-center">
-                        <div className="w-16 h-16 bg-zinc-50 border border-black/5 rounded-2xl overflow-hidden shrink-0 shadow-inner p-1">
-                          {item.image && <img src={item.image} className="w-full h-full object-contain" alt="" />}
+                      <div key={i} className="flex gap-8 group items-center">
+                        <div className="w-20 h-20 bg-canvas border border-ink/10 relative shrink-0 p-2">
+                          {item.image && <img src={item.image} className="w-full h-full object-cover grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 transition-all duration-700" alt="" />}
                         </div>
                         <div className="flex-1 min-w-0">
-                          <p className="text-black text-sm font-bold line-clamp-1">{item.title}</p>
-                          <div className="flex items-center gap-3 mt-1">
-                             {item.size && <span className="text-white bg-black px-2 py-0.5 rounded text-xs font-bold">{item.size}</span>}
-                             <span className="text-zinc-400 text-xs font-semibold">Qty: {item.quantity}</span>
-                             <span className="text-zinc-400 text-xs">@ Rs {item.price.toLocaleString()}</span>
+                          <p className="text-ink text-xs font-bold uppercase tracking-widest mb-3">{item.title}</p>
+                          <div className="flex items-center gap-6">
+                             {item.size && <span className="text-accent text-[9px] font-bold border border-accent/20 px-2 py-0.5">{item.size}</span>}
+                             <span className="text-ink/40 text-[9px] font-mono tracking-widest uppercase">Qty: {item.quantity}</span>
+                             <span className="text-ink/20 text-[9px] font-mono">@ Rs {item.price.toLocaleString()}</span>
                           </div>
                         </div>
                       </div>
@@ -155,65 +162,117 @@ const AdminOrders = () => {
                   </div>
                 </div>
 
-                {/* Shipping Details */}
+                {/* Routing Matrix */}
                 <div>
-                   <h4 className="text-black font-bold text-sm uppercase tracking-wide mb-6 flex items-center gap-2">
-                    <Truck size={14} /> Shipping Address
+                   <h4 className="text-whisper text-[9px] text-accent font-bold uppercase tracking-[0.4em] mb-10 flex items-center gap-4">
+                    <Truck size={12} /> Routing . Matrix
                   </h4>
-                  <div className="bg-zinc-50 rounded-3xl p-6 border-2 border-dashed border-zinc-200">
-                    <div className="text-black text-sm font-medium leading-relaxed space-y-1">
+                  <div className="border border-ink/10 p-10 relative">
+                    <div className="text-ink text-[11px] font-medium leading-relaxed space-y-2 uppercase tracking-widest">
                       <p className="font-bold">{order.customerDetails.address.street}</p>
-                      <p className="text-zinc-500">{order.customerDetails.address.city}, {order.customerDetails.address.state} {order.customerDetails.address.postalCode}</p>
-                      <p className="text-zinc-400">{order.customerDetails.address.country}</p>
+                      <p className="opacity-40">{order.customerDetails.address.city}, {order.customerDetails.address.state} {order.customerDetails.address.postalCode}</p>
+                      {order.customerDetails.address.country && order.customerDetails.address.country.toUpperCase() !== 'PAKISTAN' && (
+                        <p className="opacity-20">{order.customerDetails.address.country}</p>
+                      )}
                     </div>
                     {order.notes && (
-                      <div className="mt-6 pt-6 border-t-2 border-white">
-                        <p className="text-black text-xs font-bold mb-2 flex items-center gap-2">
-                           <MessageSquare size={12} /> Customer Note:
+                      <div className="mt-8 pt-8 border-t border-ink/5">
+                        <p className="text-accent text-[9px] font-bold mb-3 uppercase tracking-widest flex items-center gap-3">
+                           <MessageSquare size={10} /> Transmission Note:
                         </p>
-                        <p className="text-zinc-500 text-sm italic">"{order.notes}"</p>
+                        <p className="text-ink opacity-40 text-[10px] italic">"{order.notes}"</p>
                       </div>
                     )}
                   </div>
-                  <div className="mt-6">
-                    <a 
-                      href={`https://wa.me/${order.customerDetails.phone.replace(/[^0-9]/g, '')}`} 
-                      target="_blank" 
-                      rel="noreferrer" 
-                      className="w-full bg-zinc-50 hover:bg-black text-zinc-400 hover:text-white py-5 rounded-2xl border-2 border-black flex items-center justify-center gap-3 transition-all duration-300 text-sm font-bold group/wa shadow-sm"
-                    >
-                      <ExternalLink size={16} className="group-hover/wa:rotate-45 transition-transform" />
-                      <span>Contact on WhatsApp</span>
-                    </a>
-                  </div>
+                    <div className="mt-8 space-y-4">
+                      {(() => {
+                        const baseUrl = window.location.hostname === 'localhost' ? 'http://localhost:5173' : window.location.origin;
+                        return (
+                          <>
+                            {['shipped', 'delivered'].includes(order.status) && (
+                              <div className="space-y-4">
+                                <button
+                                  onClick={() => sendTrackingMutation.mutate(order._id)}
+                                  disabled={sendTrackingMutation.isPending}
+                                  className="w-full border border-ink text-whisper text-[9px] font-bold tracking-widest py-5 flex items-center justify-center gap-4 bg-ink text-canvas hover:bg-accent hover:border-accent transition-all interactive uppercase"
+                                >
+                                  <Truck size={14} />
+                                  {sendTrackingMutation.isPending ? 'Dispatching...' : 'Dispatch Tracking Link'}
+                                </button>
+
+                                <button
+                                  onClick={() => {
+                                    const link = `${baseUrl}/orders?orderId=${order.orderId}`;
+                                    navigator.clipboard.writeText(link);
+                                    toast.success('Tracking Link Copied');
+                                  }}
+                                  className="w-full border border-ink/10 text-ink text-[9px] font-bold tracking-widest py-5 flex items-center justify-center gap-4 hover:bg-ink hover:text-canvas transition-all interactive uppercase"
+                                >
+                                  <MapPin size={14} />
+                                  Copy Tracking Link
+                                </button>
+                              </div>
+                            )}
+
+                            {order.status === 'delivered' && (
+                              <div className="space-y-4 pt-4 border-t border-ink/5">
+                                <a 
+                                  href={`https://wa.me/${order.customerDetails.phone.replace(/[^0-9]/g, '')}${
+                                    `?text=${encodeURIComponent(`Greetings. Your acquisition ${order.orderId} from HABIBI has been archived. We invite you to document your legacy here: ${baseUrl}/order-review/${order._id}`)}`
+                                  }`} 
+                                  target="_blank" 
+                                  rel="noreferrer" 
+                                  className="w-full border border-ink/10 text-whisper text-[9px] font-bold tracking-widest py-5 flex items-center justify-center gap-4 hover:bg-ink hover:text-canvas transition-all interactive opacity-60 hover:opacity-100 uppercase"
+                                >
+                                  <ExternalLink size={14} />
+                                  Share Review Protocol
+                                </a>
+
+                                <button
+                                  onClick={() => {
+                                    const link = `${baseUrl}/order-review/${order._id}`;
+                                    navigator.clipboard.writeText(link);
+                                    toast.success('Protocol Link Copied');
+                                  }}
+                                  className="w-full border border-accent/20 text-accent text-[9px] font-bold tracking-widest py-5 flex items-center justify-center gap-4 hover:bg-accent hover:text-canvas transition-all interactive uppercase"
+                                >
+                                  <MessageSquare size={14} />
+                                  Copy Review Link
+                                </button>
+                              </div>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </div>
                 </div>
               </div>
             </div>
           ))}
 
           {(!isLoading && (!data?.orders || data.orders.length === 0)) && (
-            <div className="py-24 flex flex-col items-center justify-center text-zinc-300 border-2 border-dashed border-zinc-200 rounded-[3rem]">
-              <Package size={64} className="mb-4 opacity-10" />
-              <p className="text-sm font-bold text-zinc-400">No orders found</p>
+            <div className="py-32 flex flex-col items-center justify-center border border-dashed border-ink/10">
+              <Package size={40} className="mb-6 opacity-10" />
+              <p className="text-whisper text-[9px] font-bold uppercase tracking-widest opacity-30">Archive . Empty</p>
             </div>
           )}
         </div>
       )}
 
-      {/* Pagination */}
+      {/* Navigation */}
       {data?.pagination?.pages > 1 && (
-        <div className="flex justify-center gap-3 mt-16">
+        <div className="flex justify-center gap-6 mt-20">
           {[...Array(data.pagination.pages)].map((_, i) => (
             <button 
               key={i} 
               onClick={() => setPage(i + 1)}
-              className={`w-12 h-12 rounded-2xl text-xs font-bold transition-all border-2 ${
+              className={`w-12 h-12 text-[10px] font-mono transition-all border ${
                 page === i + 1 
-                ? 'bg-black text-white border-black shadow-lg scale-110' 
-                : 'bg-white text-zinc-400 border-zinc-100 hover:border-black hover:text-black shadow-sm'
+                ? 'bg-ink text-canvas border-ink font-bold' 
+                : 'border-ink/10 text-ink opacity-40 hover:opacity-100 hover:border-ink/30'
               }`}
             >
-              {i + 1}
+              {String(i + 1).padStart(2, '0')}
             </button>
           ))}
         </div>

@@ -1,9 +1,17 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { adminApi } from '../../lib/axios';
 import AdminLayout from '../../components/AdminLayout';
 import toast from 'react-hot-toast';
 import { Plus, Edit2, Trash2, Image as ImageIcon, X, Box } from 'lucide-react';
+
+const categoryMap = {
+  't-shirts': ['Crew Neck', 'V-Neck', 'Oversized', 'Polo', 'Henley', 'Graphic', 'Plain', 'Pocket', 'Raglan', 'Long Sleeve', 'Crop', 'Compression', 'Muscle Fit', 'Sleeveless', 'Hoodie', 'Striped', 'Printed', 'Acid Wash', 'Drop Shoulder', 'Mock Neck', 'Performance', 'Tie-Dye', 'Thermal', 'Mandarin Collar', 'Ringer', 'Boxy Fit'],
+  'shirts': ['Formal', 'Casual', 'Oxford', 'Denim', 'Flannel', 'Linen', 'Cuban Collar', 'Mandarin Collar', 'Checked', 'Plaid', 'Printed', 'Chambray', 'Dress', 'Overshirt', 'Utility', 'Corduroy', 'Satin', 'Silk', 'Hawaiian', 'Polo Shirt', 'Slim Fit', 'Regular Fit', 'Oversized', 'Half Sleeve', 'Full Sleeve', 'Military', 'Band Collar', 'Button-Down', 'Western', 'Tuxedo'],
+  'jeans': ['Skinny', 'Slim Fit', 'Straight Fit', 'Regular Fit', 'Relaxed Fit', 'Loose Fit', 'Baggy', 'Bootcut', 'Flared', 'Wide Leg', 'Tapered', 'Cargo', 'Carpenter', 'Distressed', 'Ripped', 'Acid Wash', 'Mom', 'Dad', 'High-Waist', 'Low-Rise', 'Mid-Rise', 'Cropped', 'Stacked', 'Stretch', 'Vintage', 'Biker', 'Jogger', 'Raw Denim', 'Selvedge', 'Patchwork'],
+  'jackets': ['Denim', 'Leather', 'Bomber', 'Varsity', 'Puffer', 'Windbreaker', 'Trucker', 'Biker', 'Parka', 'Rain', 'Utility', 'Field', 'Military', 'Quilted', 'Fleece', 'Harrington', 'Blazer', 'Track', 'Hoodie', 'Sherpa', 'Suede', 'Down', 'Cropped', 'Longline', 'Moto', 'Softshell', 'Peacoat', 'Trench Coat', 'Overcoat', 'Ski'],
+  'accessories': [], 'footwear': [], 'other': []
+};
 
 const AdminProducts = () => {
   const queryClient = useQueryClient();
@@ -32,93 +40,97 @@ const AdminProducts = () => {
   };
 
   return (
-    <AdminLayout title="Products">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6 mb-10">
+    <AdminLayout title="Inventory Archive">
+      <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center gap-8 mb-16">
         <div>
-           <div className="flex items-center gap-3 mb-2">
-              <Box className="text-black" size={24} />
-              <h2 className="text-2xl font-bold uppercase tracking-tight text-black">All Products</h2>
+           <div className="flex items-center gap-4 mb-4">
+              <div className="w-2 h-2 bg-accent" />
+              <h2 className="text-whisper text-[10px] font-bold uppercase tracking-[0.4em] text-ink">Product . Protocol</h2>
            </div>
-          <p className="text-zinc-400 font-semibold text-xs">{data?.pagination?.total || 0} products in inventory</p>
+          <p className="text-whisper text-[11px] opacity-70 font-mono">Archive . Count: {data?.pagination?.total || 0} Units</p>
         </div>
         <button 
           onClick={() => openForm()} 
-          className="bg-black hover:bg-zinc-800 text-white font-bold uppercase tracking-wide text-xs py-4 px-8 rounded-2xl transition-all shadow-xl shadow-black/10 flex items-center gap-3 active:scale-95"
+          className="bg-ink text-canvas font-bold text-[10px] tracking-[0.3em] py-5 px-10 flex items-center gap-4 transition-all interactive hover:bg-accent uppercase"
         >
-          <Plus size={18} /> Add New Product
+          <Plus size={14} /> Initiate New Entry
         </button>
       </div>
 
       {isLoading ? (
-        <div className="h-96 bg-white border-2 border-zinc-100 rounded-[2.5rem] animate-pulse shadow-sm" />
+        <div className="h-96 bg-canvas border border-ink/10 animate-pulse" />
       ) : (
-        <div className="bg-white border-2 border-black rounded-[2.5rem] overflow-hidden shadow-xl shadow-black/5">
+        <div className="border border-ink/10 bg-canvas relative">
           <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse">
+            <table className="w-full text-left border-collapse min-w-[900px]">
               <thead>
-                <tr className="bg-black text-white text-xs font-bold uppercase tracking-wide">
-                  <th className="p-6">Product</th>
-                  <th className="p-6">Category</th>
-                  <th className="p-6">Price</th>
-                  <th className="p-6">Stock</th>
-                  <th className="p-6">Status</th>
-                  <th className="p-6 text-right">Actions</th>
+                <tr className="border-b border-ink/10 text-whisper text-[9px] font-bold uppercase tracking-[0.4em] opacity-40">
+                  <th className="p-8">Specification</th>
+                  <th className="p-8">Classification</th>
+                  <th className="p-8">Valuation</th>
+                  <th className="p-8">Availability</th>
+                  <th className="p-8">State</th>
+                  <th className="p-8 text-right">Protocol</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-zinc-100">
+              <tbody className="divide-y divide-ink/5">
                 {data?.products?.map((product) => (
-                  <tr key={product._id} className="hover:bg-zinc-50 transition-colors group">
-                    <td className="p-6">
-                      <div className="flex items-center gap-4">
-                        <div className="w-14 h-14 bg-zinc-100 border border-black/5 rounded-2xl overflow-hidden shrink-0 shadow-inner">
+                  <tr key={product._id} className="group hover:bg-ink/[0.02] transition-colors interactive">
+                    <td className="p-8">
+                      <div className="flex items-center gap-6">
+                        <div className="w-16 h-16 bg-canvas border border-ink/10 relative overflow-hidden group-hover:border-accent/30 transition-colors">
                           {product.images?.[0]?.url ? (
-                            <img src={product.images[0].url} alt="" className="w-full h-full object-contain p-1" />
+                            <img src={product.images[0].url} alt="" className="w-full h-full object-cover grayscale hover:grayscale-0 transition-all duration-700" />
                           ) : (
-                            <ImageIcon size={20} className="w-full h-full p-3 text-zinc-300" />
+                            <div className="w-full h-full flex items-center justify-center opacity-10">
+                              <ImageIcon size={20} />
+                            </div>
                           )}
                         </div>
                         <div>
-                          <p className="text-black font-bold text-sm line-clamp-1">{product.title}</p>
-                          <p className="text-zinc-400 text-xs">ID: {product._id.slice(-6).toUpperCase()}</p>
+                          <p className="text-ink font-bold text-xs uppercase tracking-widest mb-1">{product.title}</p>
+                          <p className="text-[9px] font-mono opacity-60">ID_{product._id.slice(-6).toUpperCase()}</p>
                         </div>
                       </div>
                     </td>
-                    <td className="p-6">
-                       <span className="text-zinc-500 font-semibold text-xs capitalize bg-zinc-100 px-3 py-1.5 rounded-lg border border-black/5">
-                        {product.category}
-                      </span>
-                    </td>
-                    <td className="p-6 text-black font-bold text-sm">Rs {product.price.toLocaleString()}</td>
-                    <td className="p-6">
-                      <div className="flex items-center gap-2">
-                        <div className={`w-2 h-2 rounded-full ${product.stock > 10 ? 'bg-green-400' : product.stock > 0 ? 'bg-amber-400' : 'bg-red-500 animate-pulse'}`} />
-                        <span className={`text-xs font-bold ${product.stock > 0 ? 'text-black' : 'text-red-500'}`}>
-                          {product.stock} in stock
+                    <td className="p-8">
+                      <div className="flex flex-wrap gap-3">
+                        <span className="text-accent text-[9px] font-bold uppercase tracking-widest border border-accent/20 px-3 py-1 bg-accent/5">
+                          {product.category}
                         </span>
                       </div>
                     </td>
-                    <td className="p-6">
-                      <span className={`inline-block px-3 py-1.5 rounded-xl text-xs font-bold border-2 ${
-                        product.isActive 
-                        ? 'bg-zinc-50 border-black text-black' 
-                        : 'bg-white border-zinc-100 text-zinc-300'
+                    <td className="p-8">
+                      <p className="logo-heritage text-lg text-ink">Rs {product.price.toLocaleString()}</p>
+                    </td>
+                    <td className="p-8">
+                      <div className="flex items-center gap-3">
+                        <div className={`w-1 h-1 ${product.stock > 10 ? 'bg-accent' : product.stock > 0 ? 'bg-orange-400' : 'bg-red-500 animate-pulse'}`} />
+                        <span className="text-[10px] font-mono text-ink opacity-60 uppercase tracking-widest">
+                          {product.stock} Units
+                        </span>
+                      </div>
+                    </td>
+                    <td className="p-8">
+                      <span className={`text-[9px] font-bold uppercase tracking-widest ${
+                        product.isActive ? 'text-accent' : 'text-ink/20'
                       }`}>
-                        {product.isActive ? 'Active' : 'Draft'}
+                        {product.isActive ? 'Active' : 'Archived'}
                       </span>
                     </td>
-                    <td className="p-6 text-right">
-                      <div className="flex justify-end gap-3 opacity-0 group-hover:opacity-100 transition-all duration-300 translate-x-4 group-hover:translate-x-0">
+                    <td className="p-8 text-right">
+                      <div className="flex justify-end gap-6 opacity-0 group-hover:opacity-100 transition-all duration-500">
                         <button 
                           onClick={() => openForm(product)} 
-                          className="w-10 h-10 bg-white border-2 border-black text-black hover:bg-black hover:text-white rounded-xl flex items-center justify-center transition-all shadow-md"
+                          className="text-ink hover:text-accent transition-colors"
                         >
-                          <Edit2 size={16} />
+                          <Edit2 size={14} />
                         </button>
                         <button 
-                          onClick={() => { if(confirm('Are you sure you want to delete this product?')) deleteMutation.mutate(product._id) }}
-                          className="w-10 h-10 bg-white border-2 border-red-500 text-red-500 hover:bg-red-500 hover:text-white rounded-xl flex items-center justify-center transition-all shadow-md"
+                          onClick={() => { if(confirm('Confirm Archival Deletion?')) deleteMutation.mutate(product._id) }}
+                          className="text-red-900/50 hover:text-red-500 transition-colors"
                         >
-                          <Trash2 size={16} />
+                          <Trash2 size={14} />
                         </button>
                       </div>
                     </td>
@@ -127,26 +139,26 @@ const AdminProducts = () => {
               </tbody>
             </table>
             {(isLoading === false && (!data?.products || data.products.length === 0)) && (
-              <div className="py-24 flex flex-col items-center justify-center text-zinc-300">
-                <Box size={64} className="mb-4 opacity-10" />
-                <p className="text-sm font-bold text-zinc-400">No products found</p>
+              <div className="py-32 flex flex-col items-center justify-center opacity-20">
+                <Box size={40} className="mb-6" />
+                <p className="text-whisper text-[9px] font-bold uppercase tracking-widest">Repository . Empty</p>
               </div>
             )}
           </div>
         </div>
       )}
 
-      {/* Pagination */}
+      {/* Pagination Protocol */}
       {data?.pagination?.pages > 1 && (
-        <div className="flex justify-center gap-3 mt-12">
+        <div className="flex justify-center gap-px mt-12 border border-ink/10 bg-ink/10">
           {[...Array(data.pagination.pages)].map((_, i) => (
             <button
               key={i}
               onClick={() => setPage(i + 1)}
-              className={`w-12 h-12 rounded-2xl text-xs font-bold transition-all border-2 ${
+              className={`w-12 h-12 text-[10px] font-bold transition-all ${
                 page === i + 1 
-                ? 'bg-black text-white border-black shadow-lg scale-110' 
-                : 'bg-white text-zinc-400 border-zinc-100 hover:border-black hover:text-black shadow-sm'
+                ? 'bg-ink text-canvas' 
+                : 'bg-canvas text-ink/40 hover:text-ink hover:bg-ink/[0.03]'
               }`}
             >
               {i + 1}
@@ -172,23 +184,43 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
     title: product?.title || '',
     description: product?.description || '',
     price: product?.price || '',
-    stock: product?.stock || '',
     category: product?.category || 't-shirts',
+    subCategory: product?.subCategory || '',
+    stock: product?.stock || '',
     isActive: product !== null ? product?.isActive : true,
+    sizes: product?.sizes || [],
+    colors: product?.colors || [],
+    tags: product?.tags || [],
   });
-  const [images, setImages] = useState([]);
 
-  const categories = ['t-shirts', 'shirts', 'jeans', 'jackets'];
+  useEffect(() => {
+    const currentCategory = form.category || 't-shirts';
+    const validSubs = categoryMap[currentCategory] || [];
+    if (form.subCategory && !validSubs.includes(form.subCategory)) {
+       setForm(prev => ({ ...prev, subCategory: '' }));
+    }
+  }, [form.category]);
+
+  const [images, setImages] = useState([]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
     
+    if (form.sizes.length === 0) {
+      setLoading(false);
+      return toast.error('Please select at least one proportion');
+    }
+
     const formData = new FormData();
-    Object.keys(form).forEach(key => formData.append(key, form[key]));
-    
-    // Default sizes match customer requests
-    if(!product) formData.append('sizes', JSON.stringify(['S', 'M', 'L', 'XL']));
+    formData.append('title', form.title);
+    formData.append('description', form.description);
+    formData.append('price', form.price);
+    formData.append('category', form.category);
+    formData.append('subCategory', form.subCategory);
+    formData.append('stock', form.stock);
+    formData.append('isActive', form.isActive);
+    formData.append('sizes', JSON.stringify(form.sizes));
     
     if (images) {
       for (let i = 0; i < images.length; i++) {
@@ -213,121 +245,162 @@ const ProductModal = ({ product, onClose, onSuccess }) => {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/80 backdrop-blur-md">
-      <div className="bg-white border-2 border-black rounded-[3rem] w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col shadow-2xl animate-slide-up">
-        <div className="flex justify-between items-center p-10 border-b-2 border-black sticky top-0 bg-white z-10">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-6 bg-black/60">
+      <div className="bg-canvas border border-ink/20 w-full max-w-2xl max-h-[90vh] overflow-hidden flex flex-col relative animate-fade-in">
+        <div className="flex justify-between items-center p-12 border-b border-ink/10 sticky top-0 bg-canvas z-10">
           <div>
-            <h2 className="text-2xl font-bold text-black">
-              {product ? 'Edit Product' : 'Add New Product'}
+            <h2 className="logo-heritage text-3xl text-ink">
+              {product ? 'Refine Entry' : 'New Protocol'}
             </h2>
-            <p className="text-sm text-zinc-400 mt-1">Fill in the product details below</p>
+            <p className="text-whisper text-[9px] text-accent tracking-widest mt-2">Operational . Data . Entry</p>
           </div>
-          <button onClick={onClose} className="w-12 h-12 bg-zinc-50 border-2 border-black/10 rounded-2xl flex items-center justify-center text-black hover:bg-black hover:text-white transition-all">
-            <X size={24} />
+          <button onClick={onClose} className="text-ink hover:text-accent transition-colors">
+            <X size={20} />
           </button>
         </div>
         
-        <form onSubmit={handleSubmit} className="p-10 space-y-8 overflow-y-auto">
-          <div>
-            <label className="block text-black font-bold text-sm mb-3">Product Name</label>
+        <form onSubmit={handleSubmit} className="p-12 space-y-10 overflow-y-auto custom-scrollbar">
+          <div className="space-y-4">
+            <label className="text-whisper text-[9px] text-ink opacity-70 uppercase tracking-widest">Product Identity</label>
             <input 
               type="text" 
               value={form.title} 
               onChange={e=>setForm({...form, title: e.target.value})} 
-              className="w-full bg-zinc-50 border-2 border-zinc-100 focus:border-black rounded-2xl py-4 px-6 text-sm font-medium focus:outline-none transition-all" 
-              placeholder="e.g. Void Oversized Tee"
+              className="w-full bg-transparent border-b border-ink/10 focus:border-accent py-4 text-sm font-medium focus:outline-none transition-all placeholder:text-ink/10 text-ink" 
+              placeholder="ENTRY NAME..."
               required 
             />
           </div>
           
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <label className="block text-black font-bold text-sm mb-3">Price (Rs)</label>
+          <div className="grid grid-cols-2 gap-12">
+            <div className="space-y-4">
+              <label className="text-whisper text-[9px] text-ink opacity-70 uppercase tracking-widest">Valuation (Rs)</label>
               <input 
                 type="number" 
                 value={form.price} 
                 onChange={e=>setForm({...form, price: e.target.value})} 
-                className="w-full bg-zinc-50 border-2 border-zinc-100 focus:border-black rounded-2xl py-4 px-6 text-sm font-medium focus:outline-none transition-all" 
+                className="w-full bg-transparent border-b border-ink/10 focus:border-accent py-4 text-sm font-medium focus:outline-none transition-all text-ink" 
                 required 
                 min="0" 
               />
             </div>
-            <div>
-              <label className="block text-black font-bold text-sm mb-3">Stock Quantity</label>
+            <div className="space-y-4">
+              <label className="text-whisper text-[9px] text-ink opacity-70 uppercase tracking-widest">Unit Count</label>
               <input 
                 type="number" 
                 value={form.stock} 
                 onChange={e=>setForm({...form, stock: e.target.value})} 
-                className="w-full bg-zinc-50 border-2 border-zinc-100 focus:border-black rounded-2xl py-4 px-6 text-sm font-medium focus:outline-none transition-all" 
+                className="w-full bg-transparent border-b border-ink/10 focus:border-accent py-4 text-sm font-medium focus:outline-none transition-all text-ink" 
                 required 
                 min="0" 
               />
             </div>
           </div>
           
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <label className="block text-black font-bold text-sm mb-3">Category</label>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-12">
+            <div className="space-y-4">
+              <label className="text-whisper text-[9px] text-ink opacity-70 uppercase tracking-widest">Classification</label>
               <select 
                 value={form.category} 
                 onChange={e=>setForm({...form, category: e.target.value})} 
-                className="w-full bg-zinc-50 border-2 border-zinc-100 focus:border-black rounded-2xl py-4 px-6 text-sm font-medium focus:outline-none transition-all cursor-pointer appearance-none capitalize"
+                className="w-full bg-transparent border-b border-ink/10 focus:border-accent py-4 text-sm font-medium focus:outline-none transition-all cursor-pointer text-ink"
               >
-                {categories.map(cat => (
-                  <option key={cat} value={cat}>{cat.replace('-', ' ')}</option>
+                {Object.keys(categoryMap).map(cat => (
+                  <option key={cat} value={cat} className="bg-canvas text-ink">{cat.toUpperCase()}</option>
                 ))}
               </select>
             </div>
-            <div>
-              <label className="block text-black font-bold text-sm mb-3">Status</label>
+            
+            <div className="space-y-4">
+              <label className="text-whisper text-[9px] text-ink opacity-70 uppercase tracking-widest">Sub . Classification</label>
+              <select 
+                value={form.subCategory} 
+                onChange={e=>setForm({...form, subCategory: e.target.value})} 
+                className="w-full bg-transparent border-b border-ink/10 focus:border-accent py-4 text-sm font-medium focus:outline-none transition-all cursor-pointer text-ink"
+                required
+              >
+                <option value="">SELECT SUB-CATEGORY</option>
+                {(categoryMap[form.category] || []).map(sub => (
+                  <option key={sub} value={sub} className="bg-canvas text-ink">{sub.toUpperCase()}</option>
+                ))}
+              </select>
+            </div>
+
+            <div className="space-y-4">
+              <label className="text-whisper text-[9px] text-ink opacity-70 uppercase tracking-widest">State</label>
               <select 
                 value={form.isActive} 
                 onChange={e=>setForm({...form, isActive: e.target.value === 'true'})} 
-                className="w-full bg-zinc-50 border-2 border-zinc-100 focus:border-black rounded-2xl py-4 px-6 text-sm font-medium focus:outline-none transition-all cursor-pointer appearance-none"
+                className="w-full bg-transparent border-b border-ink/10 focus:border-accent py-4 text-sm font-medium focus:outline-none transition-all cursor-pointer text-ink"
               >
-                <option value="true">Active</option>
-                <option value="false">Draft</option>
+                <option value="true" className="bg-canvas">ACTIVE</option>
+                <option value="false" className="bg-canvas">ARCHIVED</option>
               </select>
             </div>
           </div>
 
-          <div>
-            <label className="block text-black font-bold text-sm mb-3">Description</label>
+          <div className="space-y-6">
+            <label className="text-whisper text-[9px] text-ink opacity-70 uppercase tracking-widest">Available Proportions</label>
+            <div className="grid grid-cols-4 sm:grid-cols-8 gap-4">
+              {['XS', 'S', 'M', 'L', 'XL', 'XXL', '3XL', 'FREE SIZE'].map(size => (
+                <button
+                  key={size}
+                  type="button"
+                  onClick={() => {
+                    const newSizes = form.sizes.includes(size)
+                      ? form.sizes.filter(s => s !== size)
+                      : [...form.sizes, size];
+                    setForm({ ...form, sizes: newSizes });
+                  }}
+                  className={`py-4 text-[10px] font-bold border transition-all duration-500 ${
+                    form.sizes.includes(size)
+                      ? 'border-accent text-accent bg-accent/5'
+                      : 'border-ink/10 text-ink/40 hover:border-ink/30'
+                  }`}
+                >
+                  {size}
+                </button>
+              ))}
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <label className="text-whisper text-[9px] text-ink opacity-70 uppercase tracking-widest">Narrative Specification</label>
             <textarea 
               value={form.description} 
               onChange={e=>setForm({...form, description: e.target.value})} 
-              className="w-full bg-zinc-50 border-2 border-zinc-100 focus:border-black rounded-2xl py-4 px-6 text-sm font-medium focus:outline-none transition-all min-h-[120px]" 
+              className="w-full bg-transparent border-b border-ink/10 focus:border-accent py-4 text-sm font-medium focus:outline-none transition-all min-h-[100px] text-ink" 
               required 
             />
           </div>
           
-          <div>
-            <label className="block text-black font-bold text-sm mb-3">Images {product && '(Add More)'}</label>
-            <div className="relative group">
+          <div className="space-y-4">
+            <label className="text-whisper text-[9px] text-ink opacity-40 uppercase tracking-widest">Visual Matrix</label>
+            <div className="relative group border border-dashed border-ink/10 p-12 text-center hover:border-accent transition-all">
                <input 
                  type="file" 
                  multiple 
                  accept="image/*" 
                  onChange={e=>setImages(e.target.files)} 
-                 className="w-full bg-zinc-100 border-2 border-dashed border-black/10 hover:border-black hover:bg-zinc-50 rounded-2xl p-10 text-xs font-medium text-zinc-400 transition-all cursor-pointer file:hidden" 
+                 className="absolute inset-0 opacity-0 cursor-pointer z-10" 
                />
-               <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none text-zinc-300 group-hover:text-black group-hover:scale-110 transition-all">
-                  <ImageIcon size={32} className="mb-2" />
-                  <span className="text-xs font-bold">Click to upload images</span>
+               <div className="flex flex-col items-center justify-center text-ink/20 group-hover:text-accent transition-all">
+                  <ImageIcon size={24} className="mb-4" />
+                  <span className="text-[9px] font-bold tracking-widest uppercase">Select Archive Images</span>
                </div>
             </div>
           </div>
 
-          <div className="pt-10 flex gap-4 mt-10">
-            <button type="button" onClick={onClose} className="flex-1 bg-white border-2 border-black text-black font-bold text-sm py-5 rounded-2xl hover:bg-zinc-50 transition-all">
-              Cancel
+          <div className="pt-12 flex gap-8">
+            <button type="button" onClick={onClose} className="flex-1 border border-ink/10 text-whisper text-[9px] font-bold tracking-widest py-5 uppercase hover:bg-ink hover:text-canvas transition-all">
+              Abort
             </button>
             <button 
               type="submit" 
               disabled={loading} 
-              className="flex-[2] bg-black text-white font-bold text-sm py-5 rounded-2xl hover:bg-zinc-800 transition-all shadow-xl shadow-black/10 disabled:opacity-50"
+              className="flex-[2] bg-ink text-canvas font-bold text-[9px] tracking-widest py-5 uppercase hover:bg-accent transition-all shadow-xl shadow-black/10 disabled:opacity-50"
             >
-              {loading ? 'Saving...' : (product ? 'Update Product' : 'Create Product')}
+              {loading ? 'PROCESSING...' : (product ? 'UPDATE PROTOCOL' : 'FINALIZE ENTRY')}
             </button>
           </div>
         </form>
