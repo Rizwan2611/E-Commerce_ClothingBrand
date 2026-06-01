@@ -20,7 +20,7 @@ const CheckoutPage = () => {
     city: '',
     state: '',
     postalCode: '',
-    country: '',
+    country: 'India',
     paymentMethod: 'cod',
     notes: '',
   });

@@ -171,7 +171,7 @@ const AdminOrders = () => {
                     <div className="text-ink text-[11px] font-medium leading-relaxed space-y-2 uppercase tracking-widest">
                       <p className="font-bold">{order.customerDetails.address.street}</p>
                       <p className="opacity-40">{order.customerDetails.address.city}, {order.customerDetails.address.state} {order.customerDetails.address.postalCode}</p>
-                      {order.customerDetails.address.country && order.customerDetails.address.country.toUpperCase() !== 'PAKISTAN' && (
+                      {order.customerDetails.address.country && order.customerDetails.address.country.toUpperCase() !== 'INDIA' && (
                         <p className="opacity-20">{order.customerDetails.address.country}</p>
                       )}
                     </div>
@@ -217,9 +217,12 @@ const AdminOrders = () => {
                             {order.status === 'delivered' && (
                               <div className="space-y-4 pt-4 border-t border-ink/5">
                                 <a 
-                                  href={`https://wa.me/${order.customerDetails.phone.replace(/[^0-9]/g, '')}${
-                                    `?text=${encodeURIComponent(`Greetings. Your acquisition ${order.orderId} from HABIBI has been archived. We invite you to document your legacy here: ${baseUrl}/order-review/${order._id}`)}`
-                                  }`} 
+                                  href={(() => {
+                                    // Format Indian number for wa.me (needs country code, no +)
+                                    const rawPhone = order.customerDetails.phone.replace(/[^0-9]/g, '');
+                                    const waPhone = rawPhone.startsWith('91') ? rawPhone : `91${rawPhone}`;
+                                    return `https://wa.me/${waPhone}?text=${encodeURIComponent(`Greetings. Your acquisition ${order.orderId} from HABIBI has been archived. We invite you to document your legacy here: ${baseUrl}/order-review/${order._id}`)}`;
+                                  })()}
                                   target="_blank" 
                                   rel="noreferrer" 
                                   className="w-full border border-ink/10 text-whisper text-[9px] font-bold tracking-widest py-5 flex items-center justify-center gap-4 hover:bg-ink hover:text-canvas transition-all interactive opacity-60 hover:opacity-100 uppercase"

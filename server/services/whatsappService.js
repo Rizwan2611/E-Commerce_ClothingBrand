@@ -57,7 +57,7 @@ const sendNewOrderNotification = async (order) => {
 🧾 *Items Ordered:*
 ${itemList}
 
-⏰ Placed at: ${new Date(order.createdAt).toLocaleString('en-PK')}
+⏰ Placed at: ${new Date(order.createdAt).toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
 `.trim();
 
   return sendWhatsAppNotification(message);
@@ -72,7 +72,7 @@ const sendOrderCancelledNotification = async (order) => {
 👤 Customer: ${order.customerDetails.name}
 📞 Phone: ${order.customerDetails.phone}
 🚫 Cancelled by: ${order.cancelledBy === 'customer' ? 'Customer' : 'Shopkeeper'}
-⏰ At: ${new Date().toLocaleString('en-PK')}
+⏰ At: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}
 `.trim();
 
   return sendWhatsAppNotification(message);
@@ -85,9 +85,13 @@ const sendWhatsAppToCustomer = async (number, message) => {
       return { success: true, dev: true };
     }
 
+    // Normalize to Indian E.164 format (+91XXXXXXXXXX)
+    const digits = number.replace(/[^0-9]/g, '');
+    const e164 = digits.startsWith('91') ? `+${digits}` : `+91${digits}`;
+
     const result = await client.messages.create({
       from: process.env.TWILIO_WHATSAPP_FROM,
-      to: `whatsapp:${number}`,
+      to: `whatsapp:${e164}`,
       body: message,
     });
 
