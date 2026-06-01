@@ -23,7 +23,7 @@ const app = express();
 // Security & middleware
 app.use(helmet({ 
   crossOriginResourcePolicy: false,
-  crossOriginOpenerPolicy: false 
+  crossOriginOpenerPolicy: { policy: "same-origin-allow-popups" }
 }));
 
 // Diagnostic Logging
